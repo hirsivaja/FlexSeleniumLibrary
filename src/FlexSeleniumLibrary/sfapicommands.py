@@ -1,0 +1,287 @@
+class SeleniumFlexAPICommands(object):
+    def __init__(self, flex_selenium):
+        self.flex_selenium = flex_selenium
+
+    def call(self, function_name, *function_parameters):
+        params = ""
+        for param in function_parameters:
+            params += "'" + str(param) + "',"
+        script = "return document.{}.{}({});".format(self.flex_selenium.flash_object_id, function_name, params[:-1])
+        return self.flex_selenium.selenium.execute_script(script)
+
+    def do_flex_add_select_index(self, element_id, index):
+        return self.call("doFlexAddSelectIndex", element_id, index)
+
+    def do_flex_add_select_matching_on_field(self, element_id, underlying_field, underlying_value):
+        return self.call("doFlexAddSelectMatchingOnField", element_id, underlying_field, underlying_value)
+
+    def do_flex_alert_response(self, response):
+        return self.call("doFlexAlertResponse", response, response)
+
+    def do_flex_checkbox(self, element_id, value):
+        return self.call("doFlexCheckBox", element_id, value)
+
+    def do_flex_click(self, element_id, button_label):
+        return self.call("doFlexClick", element_id, button_label)
+
+    def do_flex_click_data_grid_item(self):
+        raise NotImplementedError("The function call 'doFlexClickDataGridItem' is not implemented.")
+
+    def do_flex_click_data_grid_ui_component(self, element_id, row_index, column_index, click_first_component_of_cell):
+        return self.call("doFlexClickDataGridUIComponent", element_id,
+                         "{},{},{}".format(row_index, column_index, 0 if click_first_component_of_cell else -1))
+
+    def do_flex_click_menu_bar_ui_component(self):
+        raise NotImplementedError("The function call 'doFlexClickMenuBarUIComponent' is not implemented.")
+
+    def do_flex_data_grid_checkbox(self, element_id, row_index, column_index, checkbox_state):
+        return self.call("doFlexDataGridCheckBox", element_id,
+                         "{},{},{}".format(row_index, column_index, checkbox_state))
+
+    def do_flex_data_grid_column_header(self, element_id, column_index):
+        return self.call("doFlexDataGridClickColumnHeader", element_id, column_index)
+
+    def do_flex_data_grid_date(self, element_id, row_index, column_index, date):
+        return self.call("doFlexDataGridDate", element_id, "{},{},{}".format(row_index, column_index, date))
+
+    def do_flex_data_grid_select_combo_by_label(self, element_id, row_index, column_index, label):
+        return self.call("doFlexDataGridSelectComboByLabel", element_id,
+                         "{},{},{}".format(row_index, column_index, label))
+
+    def do_flex_date(self, element_id, date_as_text):
+        return self.call("doFlexDate", element_id, date_as_text)
+
+    def do_flex_double_click(self):
+        raise NotImplementedError("The function call 'doFlexDoubleClick' is not implemented.")
+
+    def do_flex_double_click_data_grid_ui_component(self):
+        raise NotImplementedError("The function call 'doFlexDoubleClickDataGridUIComponent' is not implemented.")
+
+    def do_flex_drag_to(self):
+        raise NotImplementedError("The function call 'doFlexDragTo' is not implemented.")
+
+    def do_flex_enter_key(self):
+        raise NotImplementedError("The function call 'doFlexEnterKey' is not implemented.")
+
+    def do_flex_mouse_down(self):
+        raise NotImplementedError("The function call 'doFlexMouseDown' is not implemented.")
+
+    def do_flex_mouse_event(self):
+        raise NotImplementedError("The function call 'doFlexMouseEvent' is not implemented.")
+
+    def do_flex_mouse_move(self):
+        raise NotImplementedError("The function call 'doFlexMouseMove' is not implemented.")
+
+    def do_flex_mouse_over(self):
+        raise NotImplementedError("The function call 'doFlexMouseOver' is not implemented.")
+
+    def do_flex_mouse_roll_out(self):
+        raise NotImplementedError("The function call 'doFlexMouseRollOut' is not implemented.")
+
+    def do_flex_mouse_roll_over(self):
+        raise NotImplementedError("The function call 'doFlexMouseRollOver' is not implemented.")
+
+    def do_flex_mouse_up(self):
+        raise NotImplementedError("The function call 'doFlexMouseUp' is not implemented.")
+
+    def do_flex_notify(self):
+        raise NotImplementedError("The function call 'doFlexNotify' is not implemented.")
+
+    def do_flex_property(self, element_id, flex_property, value):
+        return self.call("doFlexProperty", "{}\.{}".format(element_id, flex_property), value)
+
+    def do_flex_radio_button(self, element_id, state='true'):
+        return self.call("doFlexRadioButton", element_id, state)
+
+    def do_flex_refresh_id_tool_tips(self):
+        return self.call("doFlexRefreshIDToolTips", '', '')
+
+    def do_flex_right_mouse_down(self):
+        raise NotImplementedError("The function call 'doFlexRightMouseDown' is not implemented.")
+
+    def do_flex_select(self, element_id, item_to_select):
+        return self.call("doFlexSelect", element_id, item_to_select)
+
+    def do_flex_select_matching_on_field(self, element_id, underlying_field, underlying_value):
+        raise NotImplementedError("The function call 'doFlexSelectMatchingOnField' is not implemented. "
+                                  "Use 'rawFlexSelectMatchingOnField' instead.")
+
+    def do_flex_select_combo_by_label(self, element_id, item_to_select):
+        return self.call("doFlexSelectComboByLabel", element_id, item_to_select)
+
+    def do_flex_select_index(self, element_id, index_to_select):
+        return self.call("doFlexSelectIndex", element_id, index_to_select)
+
+    def do_flex_set_data_grid_cell(self, element_id, row_index, column_index, value):
+        raise NotImplementedError("The function call 'doFlexSetDataGridCell' is not implemented. "
+                                  "Use 'rawFlexSetDataGridCell' instead.")
+
+    def do_flex_set_focus(self, element_id):
+        return self.call("doFlexSetFocus", element_id)
+
+    def do_flex_stepper(self, element_id, number):
+        return self.call("doFlexStepper", element_id, number)
+
+    def do_flex_type(self, element_id, text):
+        return self.call("doFlexType", element_id, text)
+
+    def do_flex_type_append(self, element_id, text):
+        return self.call("doFlexTypeAppend", element_id, text)
+
+    def do_flex_wait_for_element(self):
+        raise NotImplementedError("The function call 'doFlexWaitForElement' is not implemented.")
+
+    def do_flex_wait_for_element_visible(self):
+        raise NotImplementedError("The function call 'doFlexWaitForElementVisible' is not implemented.")
+
+    def get_flex_as_property(self):
+        raise NotImplementedError("The function call 'getFlexASProperty' is not implemented.")
+
+    def get_flex_alert_present(self):
+        return self.call("getFlexAlertPresent", '', '')
+
+    def get_flex_alert_text(self):
+        return self.call("getFlexAlertText", '', '')
+
+    def get_flex_alert_text_present(self):
+        raise NotImplementedError("The function call 'getFlexAlertTextPresent' is not implemented.")
+
+    def get_flex_checkbox_checked(self, element_id):
+        return self.call("getFlexCheckBoxChecked", element_id, '')
+
+    def get_flex_combo_contains_label(self, element_id, label):
+        raise NotImplementedError("The function call 'getFlexComboContainsLabel' is not implemented. "
+                                  "Use 'rawFlexComboContainsLabel' instead.")
+
+    def get_flex_component_info(self):
+        raise NotImplementedError("The function call 'getFlexComponentInfo' is not implemented.")
+
+    def get_flex_data_grid_cell(self, element_id, row_index, column_index):
+        raise NotImplementedError("The function call 'getFlexDataGridCell' is not implemented. "
+                                  "Use 'rawFlexDataGridCell' instead.")
+
+    def get_flex_data_grid_cell_text(self):
+        raise NotImplementedError("The function call 'getFlexDataGridCellText' is not implemented.")
+
+    def get_flex_data_grid_checkbox_checked(self):
+        raise NotImplementedError("The function call 'getFlexDataGridCheckBoxChecked' is not implemented.")
+
+    def get_flex_data_grid_field_label_for_grid_row(self, element_id, field, row):
+        raise NotImplementedError("The function call 'getFlexDataGridFieldLabelForGridRow' is not implemented. "
+                                  "Use 'rawFlexDataGridFieldLabelForGridRow' instead.")
+
+    def get_flex_data_grid_field_value_for_grid_row(self, element_id, field, row_index):
+        raise NotImplementedError("The function call 'getFlexDataGridFieldValueForGridRow' is not implemented. "
+                                  "Use 'rawFlexDataGridFieldValueForGridRow' instead.")
+
+    def get_flex_data_grid_row_count(self, element_id):
+        return self.call("getFlexDataGridRowCount", element_id, '')
+
+    def get_flex_data_grid_row_index_for_field_label(self, element_id, field, label):
+        raise NotImplementedError("The function call 'getFlexDataGridRowIndexForFieldLabel' is not implemented. "
+                                  "Use 'rawFlexDataGridRowIndexForFieldLabel' instead.")
+
+    def get_flex_data_grid_row_index_for_field_value(self, element_id, field, value):
+        raise NotImplementedError("The function call 'getFlexDataGridRowIndexForFieldValue' is not implemented. "
+                                  "Use 'rawFlexDataGridRowIndexForFieldValue' instead.")
+
+    def get_flex_data_grid_ui_component_label(self):
+        raise NotImplementedError("The function call 'getFlexDataGridUIComponentLabel' is not implemented.")
+
+    def get_flex_date(self, element_id):
+        return self.call("getFlexDate", element_id, '')
+
+    def get_flex_enabled(self, element_id):
+        return self.call("getFlexEnabled", element_id, '')
+
+    def get_flex_error_string(self, element_id):
+        return self.call("getFlexErrorString", element_id, '')
+
+    def get_flex_exists(self, element_id):
+        return self.call("getFlexExists", element_id, '')
+
+    def get_flex_global_position(self, element_id):
+        raise NotImplementedError("The function call 'getFlexGlobalPosition' is not implemented. "
+                                  "Use 'rawFlexGlobalPosition' instead.")
+
+    def get_flex_num_selected_items(self, element_id):
+        return self.call("getFlexNumSelectedItems", element_id)
+
+    def get_flex_numeric(self):
+        raise NotImplementedError("The function call 'getFlexNumeric' is not implemented.")
+
+    def get_flex_parse_int(self):
+        raise NotImplementedError("The function call 'getFlexParseInt' is not implemented.")
+
+    def get_flex_property(self, element_id, flex_property):
+        raise NotImplementedError("The function call 'getFlexProperty' is not implemented. "
+                                  "Use 'rawFlexProperty' instead.")
+
+    def get_flex_radio_button(self, element_id):
+        return self.call("getFlexRadioButton", element_id, '')
+
+    def get_flex_selected_item_at_index(self, element_id, index):
+        return self.call("getFlexSelectedItemAtIndex", element_id, index)
+
+    def get_flex_selection(self, element_id):
+        return self.call("getFlexSelection", element_id, '')
+
+    def get_flex_selection_index(self, element_id):
+        return self.call("getFlexSelectionIndex", element_id, '')
+
+    def get_flex_stepper(self, element_id):
+        return self.call("getFlexStepper", element_id, '')
+
+    def get_flex_text(self, element_id):
+        return self.call("getFlexText", element_id, '')
+
+    def get_flex_text_present(self, element_id, text):
+        return self.call("getFlexTextPresent", element_id, text)
+
+    def get_flex_visible(self, element_id):
+        return self.call("getFlexVisible", element_id, '')
+
+    def raw_flex_click_data_grid_item(self):
+        raise NotImplementedError("The function call 'rawFlexClickDataGridItem' is not implemented.")
+
+    def raw_flex_click_menu_bar_ui_component(self):
+        raise NotImplementedError("The function call 'rawFlexClickMenuBarUIComponent' is not implemented.")
+
+    def raw_flex_combo_contains_label(self, element_id, label):
+        return self.call("rawFlexComboContainsLabel", element_id, label)
+
+    def raw_flex_data_grid_cell(self, element_id, row_index, column_index):
+        return self.call("rawFlexDataGridCell", element_id, row_index, column_index)
+
+    def raw_flex_data_grid_cell_text(self):
+        raise NotImplementedError("The function call 'rawFlexDataGridCellText' is not implemented.")
+
+    def raw_flex_data_grid_field_label_for_grid_row(self, element_id, field, row):
+        return self.call("rawFlexDataGridFieldLabelForGridRow", element_id, field, row)
+
+    def raw_flex_data_grid_field_value_for_grid_row(self, element_id, field, row_index):
+        return self.call("rawFlexDataGridFieldValueForGridRow", element_id, field, row_index)
+
+    def raw_flex_data_grid_row_index_for_field_value(self, element_id, field, value):
+        return self.call("rawFlexDataGridRowIndexForFieldValue", element_id, field, value)
+
+    def raw_flex_data_grid_row_index_for_field_label(self, element_id, field, label):
+        return self.call("rawFlexDataGridRowIndexForFieldLabel", element_id, field, label)
+
+    def raw_flex_data_grid_ui_component_label(self):
+        raise NotImplementedError("The function call 'rawFlexDataGridUIComponentLabel' is not implemented.")
+
+    def raw_flex_global_position(self, element_id):
+        return self.call("rawFlexGlobalPosition", element_id, 'false')
+
+    def raw_flex_properties(self):
+        raise NotImplementedError("The function call 'rawFlexProperties' is not implemented.")
+
+    def raw_flex_property(self, element_id, flex_property, json):
+        return self.call("rawFlexProperty", element_id, flex_property, "true" if json else "false")
+
+    def raw_flex_select_matching_on_field(self, element_id, underlying_field, underlying_value):
+        return self.call("rawFlexSelectMatchingOnField", element_id, underlying_field, underlying_value)
+
+    def raw_flex_set_data_grid_cell(self, element_id, row_index, column_index, value):
+        return self.call("rawFlexSetDataGridCell", element_id, row_index, column_index, value)

@@ -1,0 +1,276 @@
+import os
+import time
+import unittest
+
+from src.FlexSeleniumLibrary.selenium_keywords import SeleniumKeywords
+from src.FlexSeleniumLibrary.flexselenium_keywords import FlexSeleniumKeywords
+
+application_name = "Flex3Tester"
+application_url = "http://localhost:8080/flextest/index.html"
+page_load_wait = 1
+
+buttons_view = "0"
+radio_buttons_view = "1"
+combo_box_view = "2"
+check_box_view = "3"
+date_view = "4"
+data_grid_view = "5"
+tab_navigator_view = "6"
+stepper_view = "7"
+
+
+class TestCases(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.selenium = SeleniumKeywords()
+        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'), application_name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.exit_browser()
+
+    def setUp(self):
+        self.selenium.get(application_url)
+        time.sleep(page_load_wait)
+
+    def test_capture_screenshot(self):
+        file_path = 'screenshot.jpg'
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+        self.selenium.capture_screenshot(file_path)
+        assert os.path.isfile(file_path)
+        os.remove(file_path)
+
+    def test_click(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        self.flex_selenium.click("clickButton")
+        assert "Number of clicks: 1" == self.flex_selenium.get_text("buttonClicks")
+        self.flex_selenium.click("clickButton")
+        assert "Number of clicks: 2" == self.flex_selenium.get_text("buttonClicks")
+        self.flex_selenium.click("clickButton")
+        assert "Number of clicks: 3" == self.flex_selenium.get_text("buttonClicks")
+        self.flex_selenium.click("buttonBar", "DataGrid view")
+        assert self.flex_selenium.is_visible("dataGrid")
+
+    def test_click_alert(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        self.flex_selenium.click("alertButton")
+        assert self.flex_selenium.is_alert_visible()
+        self.flex_selenium.click_alert("OK")
+        assert not self.flex_selenium.is_alert_visible()
+
+    def test_enter_date(self):
+        self.flex_selenium.select_index("buttonBar", date_view)
+        self.flex_selenium.enter_date("dateField", "11.11.2011")
+        assert "Selected date: 11/11/2011" == self.flex_selenium.get_text("selectedDate")
+
+    def test_enter_text(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        self.flex_selenium.enter_text("alertText", "test")
+        assert "test" == self.flex_selenium.get_text("alertText")
+        self.flex_selenium.enter_text("alertText", "ing", True)
+        assert "testing" == self.flex_selenium.get_text("alertText")
+        self.flex_selenium.enter_text("alertText", "reset", False)
+        assert "reset" == self.flex_selenium.get_text("alertText")
+
+    def test_exists(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.exists("buttonBar")
+        assert self.flex_selenium.exists("clickButton")
+        assert not self.flex_selenium.exists("notButton")
+
+    def test_is_alert_visible(self):
+        self.test_click_alert()
+
+    def test_is_checkbox_checked(self):
+        self.test_select_checkbox()
+
+    def test_is_enabled(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_enabled("clickButton")
+        assert not self.flex_selenium.is_enabled("disabledButton")
+
+    def test_is_label_in_combo_data(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, true")
+        assert not self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, false")
+
+    def test_is_radiobutton_checked(self):
+        self.flex_selenium.select_index("buttonBar", radio_buttons_view)
+        self.flex_selenium.set_radiobutton_value("radioButton3")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
+        self.flex_selenium.set_radiobutton_value("radioButton2")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton3")
+        self.flex_selenium.set_radiobutton_value("radioButton3")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
+
+    def test_is_text_present(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 0")
+        assert not self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 1")
+        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks")
+
+    def test_is_visible(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_visible("clickButton")
+        assert not self.flex_selenium.is_visible("invisibleButton")
+
+    def test_get_alert_text(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        self.flex_selenium.click("alertButton")
+        assert "Alert! The world has ended!" == self.flex_selenium.get_alert_text()
+
+    def test_get_combobox_selected_item(self):
+        self.test_select_combobox_item_by_label()
+
+    def test_get_data_grid_field_value_by_row_index(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "Element2" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute1", "1")
+        assert "3" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute2", "2")
+
+    def test_get_data_grid_field_label_by_row_index(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "false" == self.flex_selenium.get_data_grid_field_label_by_row_index("dataGrid", "attribute3", "1")
+        assert "Element1" == self.flex_selenium.get_data_grid_field_label_by_row_index("dataGrid", "attribute1", "0")
+
+    def test_get_data_grid_row_count(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "3" == self.flex_selenium.get_data_grid_row_count("dataGrid")
+
+    def test_get_data_grid_row_index_by_field_label(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "2" == self.flex_selenium.get_data_grid_row_index_by_field_label("dataGrid", "attribute1", "Element3")
+        assert "1" == self.flex_selenium.get_data_grid_row_index_by_field_label("dataGrid", "attribute2", "2")
+
+    def test_get_data_grid_row_index_by_field_value(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "2" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute1", "Element3")
+        assert "1" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute2", "2")
+
+    def test_get_data_grid_value(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "2" == self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
+        assert "Element3" == self.flex_selenium.get_data_grid_value("dataGrid", "2", "0")
+
+    def test_get_date(self):
+        pass
+
+    def test_get_error_string(self):
+        pass
+
+    def test_get_global_position(self):
+        position = self.flex_selenium.get_global_position("buttonBar")
+        coordinates = position.split(',')
+        assert int(coordinates[0]) == 50
+        assert int(coordinates[1]) == 50
+
+    def test_get_number_of_selected_items(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element3")
+        assert "1" == self.flex_selenium.get_number_of_selected_items("dataGrid")
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2", True)
+        assert "2" == self.flex_selenium.get_number_of_selected_items("dataGrid")
+
+    def test_get_property(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert "buttonClicks" == self.flex_selenium.get_property("buttonClicks", "id")
+        assert "Number of clicks: 0" == self.flex_selenium.get_property("buttonClicks", "text")
+        assert "TextInput" == self.flex_selenium.get_property("alertText", "className")
+        assert "buttonClicks" == self.flex_selenium.get_property("buttonClicks", "name")
+
+    def test_get_selection_index(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert "0" == self.flex_selenium.get_selection_index("comboBox")
+        self.flex_selenium.select_index("comboBox", "2")
+        assert "2" == self.flex_selenium.get_selection_index("comboBox")
+
+    def test_get_selected_item_at_index(self):
+        self.test_select_by_matching_on_field()
+
+    def test_get_stepper_value(self):
+        self.test_set_stepper()
+
+    def test_get_text(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert "Number of clicks: 0" == self.flex_selenium.get_text("buttonClicks")
+        assert "Click" == self.flex_selenium.get_text("clickButton")
+
+    def test_select(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert "Element = Element1, 1, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
+        print self.flex_selenium.select("comboBox", "Element = Element2, 2, false")
+        assert "Element = Element2, 2, false" == self.flex_selenium.get_combobox_selected_item("comboBox")
+
+    def test_select_by_matching_on_field(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element3")
+        assert "2" == self.flex_selenium.get_selection_index("dataGrid")
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2", True)
+        assert "Element = Element3, 3, true" == self.flex_selenium.get_selected_item_at_index("dataGrid", "0")
+        assert "Element = Element2, 2, false" == self.flex_selenium.get_selected_item_at_index("dataGrid", "1")
+
+    def test_select_checkbox(self):
+        self.flex_selenium.select_index("buttonBar", check_box_view)
+        assert self.flex_selenium.is_checkbox_checked("checkBox")
+        self.flex_selenium.set_checkbox_value("checkBox", False)
+        assert not self.flex_selenium.is_checkbox_checked("checkBox")
+        self.flex_selenium.set_checkbox_value("checkBox", True)
+        assert self.flex_selenium.is_checkbox_checked("checkBox")
+
+    def test_select_combobox_item_by_label(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert "Element = Element1, 1, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
+        self.flex_selenium.select_combobox_item_by_label("comboBox", "Element = Element2, 2, false")
+        assert "Element = Element2, 2, false" == self.flex_selenium.get_combobox_selected_item("comboBox")
+        self.flex_selenium.select_combobox_item_by_label("comboBox", "Element = Element3, 3, true")
+        assert "Element = Element3, 3, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
+
+    def test_select_index(self):
+        assert self.flex_selenium.is_visible("buttonClicks")
+        self.flex_selenium.select_index("buttonBar", check_box_view)
+        assert self.flex_selenium.is_visible("checkBox")
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert self.flex_selenium.is_visible("dataGrid")
+        self.flex_selenium.select_index("dataGrid", "1")
+        self.flex_selenium.select_index("dataGrid", "2", True)
+        assert "Element = Element2, 2, false" == self.flex_selenium.get_selected_item_at_index("dataGrid", "0")
+        assert "Element = Element3, 3, true" == self.flex_selenium.get_selected_item_at_index("dataGrid", "1")
+
+    def test_select_radiobutton(self):
+        self.test_is_radiobutton_checked()
+
+    def test_set_data_grid_cell_value(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        time.sleep(1)
+        print self.flex_selenium.set_data_grid_cell_value("dataGrid", "1", "1", "test")
+        time.sleep(1)
+        print self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
+        assert "test" == self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
+
+    def test_set_focus(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert not self.flex_selenium.is_visible("invisibleButton")
+        self.flex_selenium.set_focus("invisibleButton")
+        assert self.flex_selenium.is_visible("invisibleButton")
+        self.flex_selenium.set_focus("clickButton")
+        assert not self.flex_selenium.is_visible("invisibleButton")
+
+    def test_set_property(self):
+        assert "true" == self.flex_selenium.get_property("buttonBar", "visible")
+        self.flex_selenium.set_property("buttonBar", "visible", "false")
+        assert "false" == self.flex_selenium.get_property("buttonBar", "visible")
+
+    def test_set_stepper(self):
+        self.flex_selenium.select_index("buttonBar", stepper_view)
+        assert "0" == self.flex_selenium.get_stepper_value("stepper")
+        self.flex_selenium.set_stepper_value("stepper", "10")
+        assert "10" == self.flex_selenium.get_stepper_value("stepper")
+        self.flex_selenium.set_stepper_value("stepper", "30")
+        assert "30" == self.flex_selenium.get_stepper_value("stepper")
