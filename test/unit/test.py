@@ -2,8 +2,8 @@ import os
 import time
 import unittest
 
-from src.FlexSeleniumLibrary.selenium_keywords import SeleniumKeywords
-from src.FlexSeleniumLibrary.flexselenium_keywords import FlexSeleniumKeywords
+from src.FlexSeleniumLibrary.keywords.flexselenium_keywords import FlexSeleniumKeywords
+from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
 
 application_name = "Flex3Tester"
 application_url = "http://localhost:8080/flextest/index.html"
@@ -248,11 +248,11 @@ class TestCases(unittest.TestCase):
 
     def test_set_data_grid_cell_value(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
-        time.sleep(1)
-        print self.flex_selenium.set_data_grid_cell_value("dataGrid", "1", "1", "test")
-        time.sleep(1)
-        print self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
-        assert "test" == self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
+        self.flex_selenium.set_property("dataGrid", "editable", "true")
+        self.flex_selenium.set_data_grid_cell_value("dataGrid", "0", "0", "test")
+        self.flex_selenium.set_data_grid_cell_value("dataGrid", "0", "1", "123")
+        assert "test" == self.flex_selenium.get_data_grid_value("dataGrid", "0", "0")
+        assert "123" == self.flex_selenium.get_data_grid_value("dataGrid", "0", "1")
 
     def test_set_focus(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)

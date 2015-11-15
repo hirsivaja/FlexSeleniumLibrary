@@ -1,4 +1,4 @@
-from sfapicommands import SeleniumFlexAPICommands
+from ..sfapicommands import SeleniumFlexAPICommands
 
 
 class FlexSeleniumKeywords(object):
@@ -8,8 +8,6 @@ class FlexSeleniumKeywords(object):
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-
-    ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
 
     def __init__(self, selenium=None, flash_object_id=None):
         """

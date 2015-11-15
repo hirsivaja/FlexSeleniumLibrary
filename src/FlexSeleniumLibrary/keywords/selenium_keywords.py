@@ -1,22 +1,24 @@
 from selenium import webdriver
-from flexselenium_keywords import FlexSeleniumKeywords
 
 
 class SeleniumKeywords(object):
 
-    ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
-
     def __init__(self):
         """
-        Import the library with two mandatory parameters. An initialized selenium instance and the name of the flash
-        application to test.
-        Example:
-        | Library | FlexSeleniumLibrary | ${selenium} | FlashApp
+        Keywords related to manipulating the browser instance.
+
+        The keywords utilize the selenium python module. See https://pypi.python.org/pypi/selenium
         """
         self.selenium = None
-        self.flex_selenium = None
 
     def open_browser(self, browser):
+        """Create new Selenium WebDriver
+
+        Args:
+            browser: the browser to start. "firefox", "chrome" or "ie".
+        Returns:
+            the new Selenium instance
+        """
         if browser == 'firefox':
             self.selenium = webdriver.Firefox()
         elif browser == 'chrome':
@@ -38,12 +40,17 @@ class SeleniumKeywords(object):
         return self.selenium.save_screenshot(file_path)
 
     def get(self, url):
+        """Navigate to given url
+
+        Args:
+            url: the url to navigate to
+        """
         self.selenium.get(url)
 
     def exit_browser(self):
+        """Destroy the browser instance.
+
+        """
         if self.selenium is not None:
             self.selenium.quit()
             self.selenium = None
-            self.flex_selenium = None
-
-
