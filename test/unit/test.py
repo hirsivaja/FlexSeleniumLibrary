@@ -8,6 +8,7 @@ from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
 application_name = "Flex3Tester"
 application_url = "http://localhost:8080/flextest/index.html"
 page_load_wait = 1
+sleep_after_call = 0
 
 buttons_view = "0"
 radio_buttons_view = "1"
@@ -17,6 +18,7 @@ date_view = "4"
 data_grid_view = "5"
 tab_navigator_view = "6"
 stepper_view = "7"
+mouse_view = "8"
 
 
 class TestCases(unittest.TestCase):
@@ -24,7 +26,8 @@ class TestCases(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.selenium = SeleniumKeywords()
-        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'), application_name)
+        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'),
+                                                 application_name, sleep_after_call)
 
     @classmethod
     def tearDownClass(cls):
@@ -59,6 +62,37 @@ class TestCases(unittest.TestCase):
         assert self.flex_selenium.is_alert_visible()
         self.flex_selenium.click_alert("OK")
         assert not self.flex_selenium.is_alert_visible()
+
+    def test_create_mouse_events(self):
+        self.flex_selenium.select_index("buttonBar", mouse_view)
+
+        self.flex_selenium.create_mouse_down_event("mouseEventCatcher")
+        assert "Mouse event: mouseDown" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_event("mouseEventCatcher", "mouseOut")
+        assert "Mouse event: mouseOut" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_move_event("mouseEventCatcher", "200", "200")
+        assert "Mouse event: mouseMove" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_over_event("mouseEventCatcher")
+        assert "Mouse event: mouseOver" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_roll_out_event("mouseEventCatcher")
+        assert "Mouse event: rollOut" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_roll_over_event("mouseEventCatcher")
+        assert "Mouse event: rollOver" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
+        self.flex_selenium.create_mouse_up_event("mouseEventCatcher")
+        assert "Mouse event: mouseUp" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
 
     def test_enter_date(self):
         self.flex_selenium.select_index("buttonBar", date_view)
@@ -205,7 +239,7 @@ class TestCases(unittest.TestCase):
     def test_select(self):
         self.flex_selenium.select_index("buttonBar", combo_box_view)
         assert "Element = Element1, 1, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
-        print self.flex_selenium.select("comboBox", "Element = Element2, 2, false")
+        self.flex_selenium.select("comboBox", "Element = Element2, 2, false")
         assert "Element = Element2, 2, false" == self.flex_selenium.get_combobox_selected_item("comboBox")
 
     def test_select_by_matching_on_field(self):

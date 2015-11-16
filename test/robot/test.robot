@@ -1,7 +1,7 @@
 *** Settings ***
 
 Documentation    Test cases for Flex Selenium library
-Library    FlexSeleniumLibrary    Flex3Tester
+Library    FlexSeleniumLibrary    Flex3Tester    none
 Suite Setup    Suite Start
 Suite Teardown    Suite Stop
 Test Setup    Start

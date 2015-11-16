@@ -3,22 +3,18 @@ from ..sfapicommands import SeleniumFlexAPICommands
 
 class FlexSeleniumKeywords(object):
     """
-    Test library for Adobe/Apache Flex with the help of Selenium2 WebDriver.
-
-    Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
-    in the Flex application for the commands to work.
+    The keywords that manipulate the Flex application
     """
 
-    def __init__(self, selenium=None, flash_object_id=None):
+    def __init__(self, web_driver=None, flash_object_id=None, sleep_after_call=0):
+        """Flex keywords
+
+        Args:
+            web_driver: WebDriver instance to use sending the calls to Flex application
+            flash_object_id: the name of the tested Flex application
+            sleep_after_call: wait time after each call
         """
-        Import the library with two mandatory parameters. An initialized selenium instance and the name of the flash
-        application to test.
-        Example:
-        | Library | FlexSeleniumLibrary | ${selenium} | FlashApp
-        """
-        self.selenium = selenium
-        self.flash_object_id = flash_object_id
-        self.sfapi_commands = SeleniumFlexAPICommands(self)
+        self.sfapi_commands = SeleniumFlexAPICommands(web_driver, flash_object_id, sleep_after_call)
 
     def click(self, element_id, button_label=''):
         """Click Flex element.
@@ -40,6 +36,27 @@ class FlexSeleniumKeywords(object):
             true if success, error text otherwise
         """
         return self.sfapi_commands.do_flex_alert_response(response)
+
+    def create_mouse_down_event(self, element_id):
+        return self.sfapi_commands.do_flex_mouse_down(element_id)
+
+    def create_mouse_event(self, element_id, event):
+        return self.sfapi_commands.do_flex_mouse_event(element_id, event)
+
+    def create_mouse_move_event(self, element_id, x, y):
+        return self.sfapi_commands.do_flex_mouse_move(element_id, x, y)
+
+    def create_mouse_over_event(self, element_id):
+        return self.sfapi_commands.do_flex_mouse_over(element_id)
+
+    def create_mouse_roll_out_event(self, element_id):
+        return self.sfapi_commands.do_flex_mouse_roll_out(element_id)
+
+    def create_mouse_roll_over_event(self, element_id):
+        return self.sfapi_commands.do_flex_mouse_roll_over(element_id)
+
+    def create_mouse_up_event(self, element_id):
+        return self.sfapi_commands.do_flex_mouse_up(element_id)
 
     def enter_date(self, element_id, date_as_text):
         """Enters a date to a DateField

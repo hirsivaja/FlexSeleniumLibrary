@@ -9,25 +9,27 @@ class SeleniumKeywords(object):
 
         The keywords utilize the selenium python module. See https://pypi.python.org/pypi/selenium
         """
-        self.selenium = None
+        self.web_driver = None
 
     def open_browser(self, browser):
-        """Create new Selenium WebDriver
+        """Create new Selenium WebDriver. Closes the old if it exists
 
         Args:
             browser: the browser to start. "firefox", "chrome" or "ie".
         Returns:
             the new Selenium instance
         """
+        if self.web_driver is not None:
+            self.exit_browser()
         if browser == 'firefox':
-            self.selenium = webdriver.Firefox()
+            self.web_driver = webdriver.Firefox()
         elif browser == 'chrome':
-            self.selenium = webdriver.Chrome()
+            self.web_driver = webdriver.Chrome()
         elif browser == 'ie':
-            self.selenium = webdriver.Ie()
+            self.web_driver = webdriver.Ie()
         else:
             raise AttributeError("Unknown browser: {}".format(browser))
-        return self.selenium
+        return self.web_driver
 
     def capture_screenshot(self, file_path):
         """Take a screenshot with Selenium.
@@ -37,7 +39,7 @@ class SeleniumKeywords(object):
         Returns:
             true if success, false on error
         """
-        return self.selenium.save_screenshot(file_path)
+        return self.web_driver.save_screenshot(file_path)
 
     def get(self, url):
         """Navigate to given url
@@ -45,12 +47,12 @@ class SeleniumKeywords(object):
         Args:
             url: the url to navigate to
         """
-        self.selenium.get(url)
+        self.web_driver.get(url)
 
     def exit_browser(self):
         """Destroy the browser instance.
 
         """
-        if self.selenium is not None:
-            self.selenium.quit()
-            self.selenium = None
+        if self.web_driver is not None:
+            self.web_driver.quit()
+            self.web_driver = None

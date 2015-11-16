@@ -1,13 +1,26 @@
+import time
+
+
 class SeleniumFlexAPICommands(object):
-    def __init__(self, flex_selenium):
-        self.flex_selenium = flex_selenium
+    def __init__(self, web_driver, flash_object_id, sleep_after_call=0):
+        self.web_driver = web_driver
+        self.flash_object_id = flash_object_id
+        self.sleep_after_call = sleep_after_call
+
+    def set_flash_app(self, flash_app):
+        self.flash_object_id = flash_app
 
     def call(self, function_name, *function_parameters):
+        if self.web_driver is None:
+            raise AssertionError("WebDriver is not initialized!")
         params = ""
         for param in function_parameters:
             params += "'" + str(param) + "',"
-        script = "return document.{}.{}({});".format(self.flex_selenium.flash_object_id, function_name, params[:-1])
-        return self.flex_selenium.selenium.execute_script(script)
+        script = "return document.{}.{}({});".format(self.flash_object_id, function_name, params[:-1])
+        result = self.web_driver.execute_script(script)
+        if self.sleep_after_call > 0:
+            time.sleep(self.sleep_after_call)
+        return result
 
     def do_flex_add_select_index(self, element_id, index):
         return self.call("doFlexAddSelectIndex", element_id, index)
@@ -63,26 +76,26 @@ class SeleniumFlexAPICommands(object):
     def do_flex_enter_key(self):
         raise NotImplementedError("The function call 'doFlexEnterKey' is not implemented.")
 
-    def do_flex_mouse_down(self):
-        raise NotImplementedError("The function call 'doFlexMouseDown' is not implemented.")
+    def do_flex_mouse_down(self, element_id):
+        return self.call("doFlexMouseDown", element_id, '')
 
-    def do_flex_mouse_event(self):
-        raise NotImplementedError("The function call 'doFlexMouseEvent' is not implemented.")
+    def do_flex_mouse_event(self, element_id, event):
+        return self.call("doFlexMouseEvent", element_id, event)
 
-    def do_flex_mouse_move(self):
-        raise NotImplementedError("The function call 'doFlexMouseMove' is not implemented.")
+    def do_flex_mouse_move(self, element_id, x, y):
+        return self.call("doFlexMouseMove", element_id, '{},{}'.format(x,y))
 
-    def do_flex_mouse_over(self):
-        raise NotImplementedError("The function call 'doFlexMouseOver' is not implemented.")
+    def do_flex_mouse_over(self, element_id):
+        return self.call("doFlexMouseOver", element_id, '')
 
-    def do_flex_mouse_roll_out(self):
-        raise NotImplementedError("The function call 'doFlexMouseRollOut' is not implemented.")
+    def do_flex_mouse_roll_out(self, element_id):
+        return self.call("doFlexMouseRollOut", element_id, '')
 
-    def do_flex_mouse_roll_over(self):
-        raise NotImplementedError("The function call 'doFlexMouseRollOver' is not implemented.")
+    def do_flex_mouse_roll_over(self, element_id):
+        return self.call("doFlexMouseRollOver", element_id, '')
 
-    def do_flex_mouse_up(self):
-        raise NotImplementedError("The function call 'doFlexMouseUp' is not implemented.")
+    def do_flex_mouse_up(self, element_id):
+        return self.call("doFlexMouseUp", element_id, '')
 
     def do_flex_notify(self):
         raise NotImplementedError("The function call 'doFlexNotify' is not implemented.")
