@@ -64,14 +64,14 @@ class SeleniumFlexAPICommands(object):
     def do_flex_date(self, element_id, date_as_text):
         return self.call("doFlexDate", element_id, date_as_text)
 
-    def do_flex_double_click(self):
-        raise NotImplementedError("The function call 'doFlexDoubleClick' is not implemented.")
+    def do_flex_double_click(self, element_id):
+        return self.call("doFlexDoubleClick", element_id, '')
 
-    def do_flex_double_click_data_grid_ui_component(self):
-        raise NotImplementedError("The function call 'doFlexDoubleClickDataGridUIComponent' is not implemented.")
+    def do_flex_double_click_data_grid_ui_component(self, element_id, row_index, column_index):
+        return self.call("doFlexDoubleClickDataGridUIComponent", element_id, '{},{}'.format(row_index, column_index))
 
-    def do_flex_drag_to(self):
-        raise NotImplementedError("The function call 'doFlexDragTo' is not implemented.")
+    def do_flex_drag_to(self, element_id, x, y):
+        return self.call("doFlexDragTo", element_id, '{},{}'.format(x, y))
 
     def do_flex_enter_key(self):
         raise NotImplementedError("The function call 'doFlexEnterKey' is not implemented.")
@@ -97,8 +97,8 @@ class SeleniumFlexAPICommands(object):
     def do_flex_mouse_up(self, element_id):
         return self.call("doFlexMouseUp", element_id, '')
 
-    def do_flex_notify(self):
-        raise NotImplementedError("The function call 'doFlexNotify' is not implemented.")
+    def do_flex_notify(self, message):
+        return self.call("doFlexNotify", message, '')
 
     def do_flex_property(self, element_id, flex_property, value):
         return self.call("doFlexProperty", "{}\.{}".format(element_id, flex_property), value)

@@ -16,6 +16,9 @@ class FlexSeleniumKeywords(object):
         """
         self.sfapi_commands = SeleniumFlexAPICommands(web_driver, flash_object_id, sleep_after_call)
 
+    def add_notification(self, message):
+        return self.sfapi_commands.do_flex_notify(message)
+
     def click(self, element_id, button_label=''):
         """Click Flex element.
 
@@ -57,6 +60,15 @@ class FlexSeleniumKeywords(object):
 
     def create_mouse_up_event(self, element_id):
         return self.sfapi_commands.do_flex_mouse_up(element_id)
+
+    def double_click(self, element_id):
+        return self.sfapi_commands.do_flex_double_click(element_id)
+
+    def double_click_data_grid_component(self, element_id, row_index, column_index):
+        return self.sfapi_commands.do_flex_double_click_data_grid_ui_component(element_id, row_index, column_index)
+
+    def drag_element_to(self, element_id, x, y):
+        return self.sfapi_commands.do_flex_drag_to(element_id, x, y)
 
     def enter_date(self, element_id, date_as_text):
         """Enters a date to a DateField

@@ -45,6 +45,11 @@ class TestCases(unittest.TestCase):
         assert os.path.isfile(file_path)
         os.remove(file_path)
 
+    def test_add_notification(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        self.flex_selenium.add_notification("This is a test.")
+        assert "Label" in self.flex_selenium.get_property("text=This is a test.", "name")
+
     def test_click(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         self.flex_selenium.click("clickButton")
@@ -93,6 +98,25 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.create_mouse_up_event("mouseEventCatcher")
         assert "Mouse event: mouseUp" == self.flex_selenium.get_alert_text()
         self.flex_selenium.click_alert("OK")
+
+    def test_double_click(self):
+        self.flex_selenium.select_index("buttonBar", mouse_view)
+        self.flex_selenium.double_click("dataGrid1")
+        assert "Mouse event: doubleClick" == self.flex_selenium.get_alert_text()
+
+    def test_double_click_data_grid_component(self):
+        self.flex_selenium.select_index("buttonBar", mouse_view)
+        self.flex_selenium.double_click_data_grid_component("dataGrid1", "0", "0")
+        assert "Mouse event: doubleClick" == self.flex_selenium.get_alert_text()
+
+    def test_drag_element_to(self):
+        self.flex_selenium.select_index("buttonBar", mouse_view)
+        position = self.flex_selenium.get_global_position("dataGrid2")
+        coordinates = position.split(',')
+        assert "0" == self.flex_selenium.get_data_grid_row_count("dataGrid2")
+        assert "true" == self.flex_selenium.drag_element_to("text=Element1", coordinates[0], coordinates[1])
+        # TODO
+        # assert "1" == self.flex_selenium.get_data_grid_row_count("dataGrid2")
 
     def test_enter_date(self):
         self.flex_selenium.select_index("buttonBar", date_view)
