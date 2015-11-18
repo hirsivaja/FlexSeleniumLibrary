@@ -166,8 +166,8 @@ class SeleniumFlexAPICommands(object):
         raise NotImplementedError("The function call 'getFlexComboContainsLabel' is not implemented. "
                                   "Use 'rawFlexComboContainsLabel' instead.")
 
-    def get_flex_component_info(self):
-        raise NotImplementedError("The function call 'getFlexComponentInfo' is not implemented.")
+    def get_flex_component_info(self, element_id):
+        return self.call("getFlexComponentInfo", element_id)
 
     def get_flex_data_grid_cell(self, element_id, row_index, column_index):
         raise NotImplementedError("The function call 'getFlexDataGridCell' is not implemented. "

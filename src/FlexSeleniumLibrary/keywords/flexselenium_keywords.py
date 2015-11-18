@@ -232,6 +232,9 @@ class FlexSeleniumKeywords(object):
     def get_combobox_selected_item(self, element_id):
         return self.sfapi_commands.get_flex_selection(element_id)
 
+    def get_component_info(self, element_id):
+        return self.sfapi_commands.get_flex_component_info(element_id)
+
     def get_data_grid_field_value_by_row_index(self, element_id, field, row_index):
         return self.sfapi_commands.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
 

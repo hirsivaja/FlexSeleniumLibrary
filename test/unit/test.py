@@ -188,6 +188,14 @@ class TestCases(unittest.TestCase):
     def test_get_combobox_selected_item(self):
         self.test_select_combobox_item_by_label()
 
+    def test_get_component_info(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        info = self.flex_selenium.get_component_info("clickButton").split(',')
+        assert info[0] == '274'
+        assert info[1] == '66'
+        assert info[2] == '65'
+        assert info[3] == '28'
+
     def test_get_data_grid_field_value_by_row_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         assert "Element2" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute1", "1")
