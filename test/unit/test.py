@@ -6,7 +6,7 @@ from src.FlexSeleniumLibrary.keywords.flexselenium_keywords import FlexSeleniumK
 from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
 
 application_name = "Flex3Tester"
-application_url = "http://localhost:8080/flextest/index.html"
+application_url = "http://localhost:8080/flex3test/index.html"
 page_load_wait = 1
 sleep_after_call = 0
 
@@ -46,6 +46,7 @@ class TestCases(unittest.TestCase):
         os.remove(file_path)
 
     def test_add_notification(self):
+        time.sleep(3)
         self.flex_selenium.select_index("buttonBar", buttons_view)
         self.flex_selenium.add_notification("This is a test.")
         assert "Label" in self.flex_selenium.get_property("text=This is a test.", "name")
@@ -191,6 +192,7 @@ class TestCases(unittest.TestCase):
     def test_get_component_info(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         info = self.flex_selenium.get_component_info("clickButton").split(',')
+        print info
         assert info[0] == '274'
         assert info[1] == '66'
         assert info[2] == '65'
@@ -267,6 +269,18 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         assert "Number of clicks: 0" == self.flex_selenium.get_text("buttonClicks")
         assert "Click" == self.flex_selenium.get_text("clickButton")
+
+    def test_press_key_on_element(self):
+        self.flex_selenium.select_index("buttonBar", mouse_view)
+        self.flex_selenium.press_enter_on_element("keyboardEventCatcher")
+        assert "Key event: keyUp, 13" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+        self.flex_selenium.press_key_on_element("keyboardEventCatcher", "66")
+        assert "Key event: keyUp, 66" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+        self.flex_selenium.press_space_on_element("keyboardEventCatcher")
+        assert "Key event: keyUp, 32" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
 
     def test_select(self):
         self.flex_selenium.select_index("buttonBar", combo_box_view)

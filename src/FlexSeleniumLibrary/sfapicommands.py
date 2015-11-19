@@ -73,8 +73,11 @@ class SeleniumFlexAPICommands(object):
     def do_flex_drag_to(self, element_id, x, y):
         return self.call("doFlexDragTo", element_id, '{},{}'.format(x, y))
 
-    def do_flex_enter_key(self):
-        raise NotImplementedError("The function call 'doFlexEnterKey' is not implemented.")
+    def do_flex_key_down(self, element_id, key_code):
+        return self.call("doFlexKeyDown", element_id, key_code)
+
+    def do_flex_key_up(self, element_id, key_code):
+        return self.call("doFlexKeyUp", element_id, key_code)
 
     def do_flex_mouse_down(self, element_id):
         return self.call("doFlexMouseDown", element_id, '')

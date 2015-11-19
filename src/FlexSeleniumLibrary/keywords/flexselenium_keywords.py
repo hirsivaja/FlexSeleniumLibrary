@@ -280,6 +280,19 @@ class FlexSeleniumKeywords(object):
     def get_text(self, element_id):
         return self.sfapi_commands.get_flex_text(element_id)
 
+    def press_enter_on_element(self, element_id):
+        return self.press_key_on_element(element_id, "13")
+
+    def press_key_on_element(self, element_id, key_code):
+        key_down = self.sfapi_commands.do_flex_key_down(element_id, key_code)
+        key_up = self.sfapi_commands.do_flex_key_up(element_id, key_code)
+        if key_up == "true" and key_down == "true":
+            return "true"
+        return "{} {}".format(key_down, key_up)
+
+    def press_space_on_element(self, element_id):
+        return self.press_key_on_element(element_id, "32")
+
     def select(self, element_id, item_to_select):
         """Select item from compatible element.
 
