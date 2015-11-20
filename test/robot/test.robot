@@ -1,10 +1,17 @@
 *** Settings ***
 
 Documentation    Test cases for Flex Selenium library
-Library    FlexSeleniumLibrary    Flex3Tester    none
+Library    FlexSeleniumLibrary    ${flash_app_name}    none
 Suite Setup    Suite Start
 Suite Teardown    Suite Stop
 Test Setup    Start
+
+*** Variables ***
+
+${flash_app_url}    http://localhost:8080/flex3test/index.html
+${flash_app_name}    Flex3Tester
+
+${browser}    firefox
 
 *** Test Cases ***
 Click Button
@@ -47,11 +54,11 @@ Get Property
 
 *** Keywords ***
 Suite Start
-    Open Browser   firefox
+    Open Browser   ${browser}
 
 Suite Stop
     Exit Browser
 
 Start
-    Get   http://localhost:8080/flextest/index.html
+    Get   ${flash_app_url}
     Sleep    1

@@ -1,14 +1,26 @@
 import time
+from selenium.common.exceptions import WebDriverException
 
 
 class SeleniumFlexAPICommands(object):
-    def __init__(self, web_driver, flash_object_id, sleep_after_call=0):
+    def __init__(self, web_driver, flash_object_id, sleep_after_call=0, sleep_after_fail=0.1, number_of_retries=30):
         self.web_driver = web_driver
         self.flash_object_id = flash_object_id
         self.sleep_after_call = sleep_after_call
+        self.sleep_after_fail = sleep_after_fail
+        self.number_of_retries = number_of_retries
 
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
+
+    def set_sleep_after_call(self, sleep_after_call):
+        self.sleep_after_call = sleep_after_call
+
+    def set_sleep_after_fail(self, sleep_after_fail):
+        self.sleep_after_fail = sleep_after_fail
+
+    def set_number_of_retries(self, number_of_retries):
+        self.number_of_retries = number_of_retries
 
     def call(self, function_name, *function_parameters):
         if self.web_driver is None:
@@ -17,7 +29,16 @@ class SeleniumFlexAPICommands(object):
         for param in function_parameters:
             params += "'" + str(param) + "',"
         script = "return document.{}.{}({});".format(self.flash_object_id, function_name, params[:-1])
-        result = self.web_driver.execute_script(script)
+        tries = self.number_of_retries
+        while True:
+            try:
+                result = self.web_driver.execute_script(script)
+                break
+            except WebDriverException as e:
+                if tries < 1:
+                    raise e
+                tries -= 1
+                time.sleep(self.sleep_after_fail)
         if self.sleep_after_call > 0:
             time.sleep(self.sleep_after_call)
         return result

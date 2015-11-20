@@ -7,8 +7,13 @@ from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
 
 application_name = "Flex3Tester"
 application_url = "http://localhost:8080/flex3test/index.html"
-page_load_wait = 1
+
+# application_name = "Flex4Tester"
+# application_url = "http://localhost:8080/flex4test/index.html"
+
 sleep_after_call = 0
+sleep_after_fail = 0.1
+number_of_retries = 30
 
 buttons_view = "0"
 radio_buttons_view = "1"
@@ -26,8 +31,8 @@ class TestCases(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.selenium = SeleniumKeywords()
-        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'),
-                                                 application_name, sleep_after_call)
+        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'), application_name,
+                                                 sleep_after_call, sleep_after_fail, number_of_retries)
 
     @classmethod
     def tearDownClass(cls):
@@ -35,7 +40,8 @@ class TestCases(unittest.TestCase):
 
     def setUp(self):
         self.selenium.get(application_url)
-        time.sleep(page_load_wait)
+        # Wait until "buttonBar" is found
+        self.flex_selenium.is_enabled("buttonBar")
 
     def test_capture_screenshot(self):
         file_path = 'screenshot.jpg'
@@ -46,7 +52,6 @@ class TestCases(unittest.TestCase):
         os.remove(file_path)
 
     def test_add_notification(self):
-        time.sleep(3)
         self.flex_selenium.select_index("buttonBar", buttons_view)
         self.flex_selenium.add_notification("This is a test.")
         assert "Label" in self.flex_selenium.get_property("text=This is a test.", "name")
@@ -140,10 +145,12 @@ class TestCases(unittest.TestCase):
         assert not self.flex_selenium.exists("notButton")
 
     def test_is_alert_visible(self):
-        self.test_click_alert()
+        # Tested by: self.test_click_alert()
+        pass
 
     def test_is_checkbox_checked(self):
-        self.test_select_checkbox()
+        # Tested by: self.test_select_checkbox()
+        pass
 
     def test_is_enabled(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -187,16 +194,13 @@ class TestCases(unittest.TestCase):
         assert "Alert! The world has ended!" == self.flex_selenium.get_alert_text()
 
     def test_get_combobox_selected_item(self):
-        self.test_select_combobox_item_by_label()
+        # Tested by: self.test_select_combobox_item_by_label()
+        pass
 
     def test_get_component_info(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         info = self.flex_selenium.get_component_info("clickButton").split(',')
-        print info
-        assert info[0] == '274'
-        assert info[1] == '66'
-        assert info[2] == '65'
-        assert info[3] == '28'
+        assert len(info) == 4
 
     def test_get_data_grid_field_value_by_row_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
@@ -236,8 +240,7 @@ class TestCases(unittest.TestCase):
     def test_get_global_position(self):
         position = self.flex_selenium.get_global_position("buttonBar")
         coordinates = position.split(',')
-        assert int(coordinates[0]) == 50
-        assert int(coordinates[1]) == 50
+        assert len(coordinates) == 2
 
     def test_get_number_of_selected_items(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
@@ -260,10 +263,12 @@ class TestCases(unittest.TestCase):
         assert "2" == self.flex_selenium.get_selection_index("comboBox")
 
     def test_get_selected_item_at_index(self):
-        self.test_select_by_matching_on_field()
+        # Tested by: self.test_select_by_matching_on_field()
+        pass
 
     def test_get_stepper_value(self):
-        self.test_set_stepper()
+        # Tested by: self.test_set_stepper()
+        pass
 
     def test_get_text(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -324,7 +329,8 @@ class TestCases(unittest.TestCase):
         assert "Element = Element3, 3, true" == self.flex_selenium.get_selected_item_at_index("dataGrid", "1")
 
     def test_select_radiobutton(self):
-        self.test_is_radiobutton_checked()
+        # Tested by: self.test_is_radiobutton_checked()
+        pass
 
     def test_set_data_grid_cell_value(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)

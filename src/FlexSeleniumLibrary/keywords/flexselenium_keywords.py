@@ -6,15 +6,19 @@ class FlexSeleniumKeywords(object):
     The keywords that manipulate the Flex application
     """
 
-    def __init__(self, web_driver=None, flash_object_id=None, sleep_after_call=0):
+    def __init__(self, web_driver=None, flash_object_id=None, sleep_after_call=0, sleep_after_fail=0.1,
+                 number_of_retries=30):
         """Flex keywords
 
         Args:
             web_driver: WebDriver instance to use sending the calls to Flex application
             flash_object_id: the name of the tested Flex application
             sleep_after_call: wait time after each call
+            sleep_after_fail: wait time after each fail before trying again
+            number_of_retries: number of times to retry the command
         """
-        self.sfapi_commands = SeleniumFlexAPICommands(web_driver, flash_object_id, sleep_after_call)
+        self.sfapi_commands = SeleniumFlexAPICommands(web_driver, flash_object_id, sleep_after_call,
+                                                      sleep_after_fail, number_of_retries)
 
     def add_notification(self, message):
         return self.sfapi_commands.do_flex_notify(message)
