@@ -65,8 +65,11 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexClickDataGridUIComponent", element_id,
                          "{},{},{}".format(row_index, column_index, 0 if click_first_component_of_cell else -1))
 
-    def do_flex_click_menu_bar_ui_component(self):
-        raise NotImplementedError("The function call 'doFlexClickMenuBarUIComponent' is not implemented.")
+    def do_flex_click_menu_bar_ui_component(self, element_id, menu_bar_item_index, menu_item_row_index,
+                                            menu_item_column_index, component_index_in_cell=0):
+        return self.call("doFlexClickMenuBarUIComponent", element_id,
+                         "{},{},{},{}".format(menu_bar_item_index, menu_item_row_index,
+                                              menu_item_column_index, component_index_in_cell))
 
     def do_flex_data_grid_checkbox(self, element_id, row_index, column_index, checkbox_state):
         return self.call("doFlexDataGridCheckBox", element_id,

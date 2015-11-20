@@ -74,6 +74,17 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.click_alert("OK")
         assert not self.flex_selenium.is_alert_visible()
 
+    def test_click_menu_bar_component(self):
+        self.flex_selenium.click_menu_bar_component("menuBar", 0, 0, 0)
+        assert "Clicked: Buttons view" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+        self.flex_selenium.click_menu_bar_component("menuBar", 0, 1, 0)
+        assert "Clicked: Radio buttons view" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+        self.flex_selenium.click_menu_bar_component("menuBar", 1, 0, 0)
+        assert "Clicked: About" == self.flex_selenium.get_alert_text()
+        self.flex_selenium.click_alert("OK")
+
     def test_create_mouse_events(self):
         self.flex_selenium.select_index("buttonBar", mouse_view)
 

@@ -44,6 +44,11 @@ class FlexSeleniumKeywords(object):
         """
         return self.sfapi_commands.do_flex_alert_response(response)
 
+    def click_menu_bar_component(self, element_id, menu_bar_item_index,
+                                 menu_item_row_index,menu_item_column_index, component_index_in_cell=0):
+        self.sfapi_commands.do_flex_click_menu_bar_ui_component(element_id, menu_bar_item_index, menu_item_row_index,
+                                                                menu_item_column_index, component_index_in_cell)
+
     def create_mouse_down_event(self, element_id):
         return self.sfapi_commands.do_flex_mouse_down(element_id)
 
