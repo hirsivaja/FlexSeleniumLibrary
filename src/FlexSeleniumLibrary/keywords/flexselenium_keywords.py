@@ -45,7 +45,7 @@ class FlexSeleniumKeywords(object):
         return self.sfapi_commands.do_flex_alert_response(response)
 
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
-                                 menu_item_row_index,menu_item_column_index, component_index_in_cell=0):
+                                 menu_item_row_index, menu_item_column_index, component_index_in_cell=0):
         self.sfapi_commands.raw_flex_click_menu_bar_ui_component(element_id,
                                                                  menu_bar_item_index, menu_item_row_index,
                                                                  menu_item_column_index, component_index_in_cell)
@@ -285,8 +285,11 @@ class FlexSeleniumKeywords(object):
     def get_number_of_selected_items(self, element_id):
         return self.sfapi_commands.get_flex_num_selected_items(element_id)
 
-    def get_property(self, element_id, flex_property, json=False):
-        return self.sfapi_commands.raw_flex_property(element_id, flex_property, json)
+    def get_properties(self, element_id, *flex_properties):
+        return self.sfapi_commands.raw_flex_properties(element_id, *flex_properties)
+
+    def get_property(self, element_id, flex_property):
+        return self.sfapi_commands.raw_flex_property(element_id, flex_property)
 
     def get_selection_index(self, element_id):
         return self.sfapi_commands.get_flex_selection_index(element_id)

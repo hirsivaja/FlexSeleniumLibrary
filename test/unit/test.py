@@ -276,6 +276,11 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2", True)
         assert "2" == self.flex_selenium.get_number_of_selected_items("dataGrid")
 
+    def test_get_properties(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert "clickButton,clickButton,Click" == self.flex_selenium.get_properties("clickButton", "id", "name",
+                                                                                    "label")
+
     def test_get_property(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         assert "buttonClicks" == self.flex_selenium.get_property("buttonClicks", "id")

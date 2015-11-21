@@ -109,7 +109,7 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexMouseEvent", element_id, event)
 
     def do_flex_mouse_move(self, element_id, x, y):
-        return self.call("doFlexMouseMove", element_id, '{},{}'.format(x,y))
+        return self.call("doFlexMouseMove", element_id, '{},{}'.format(x, y))
 
     def do_flex_mouse_over(self, element_id):
         return self.call("doFlexMouseOver", element_id, '')
@@ -284,7 +284,7 @@ class SeleniumFlexAPICommands(object):
     def raw_flex_click_data_grid_item(self, element_id, column_index, item_text):
         return self.call("rawFlexClickDataGridItem", element_id, column_index, item_text)
 
-    def raw_flex_click_menu_bar_ui_component(self, element_id,menu_bar_item_index, menu_item_row_index,
+    def raw_flex_click_menu_bar_ui_component(self, element_id, menu_bar_item_index, menu_item_row_index,
                                              menu_item_column_index, component_index_in_cell=0):
         return self.call("rawFlexClickMenuBarUIComponent", element_id, menu_bar_item_index, menu_item_row_index,
                          menu_item_column_index, component_index_in_cell)
@@ -311,16 +311,17 @@ class SeleniumFlexAPICommands(object):
         return self.call("rawFlexDataGridRowIndexForFieldLabel", element_id, field, label)
 
     def raw_flex_data_grid_ui_component_label(self, element_id, row_index, column_index, component_index_in_cell=0):
-        return self.call("rawFlexDataGridUIComponentLabel", element_id, row_index, column_index, component_index_in_cell)
+        return self.call("rawFlexDataGridUIComponentLabel", element_id, row_index, column_index,
+                         component_index_in_cell)
 
     def raw_flex_global_position(self, element_id):
         return self.call("rawFlexGlobalPosition", element_id, 'false')
 
-    def raw_flex_properties(self):
-        raise NotImplementedError("The function call 'rawFlexProperties' is not implemented.")
+    def raw_flex_properties(self, element_id, *properties):
+        return self.call("rawFlexProperties", element_id, ','.join(properties))
 
-    def raw_flex_property(self, element_id, flex_property, json):
-        return self.call("rawFlexProperty", element_id, flex_property, "true" if json else "false")
+    def raw_flex_property(self, element_id, flex_property):
+        return self.call("rawFlexProperty", element_id, flex_property)
 
     def raw_flex_select_matching_on_field(self, element_id, underlying_field, underlying_value):
         return self.call("rawFlexSelectMatchingOnField", element_id, underlying_field, underlying_value)
