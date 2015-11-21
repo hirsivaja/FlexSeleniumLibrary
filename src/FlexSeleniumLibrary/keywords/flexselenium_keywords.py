@@ -46,8 +46,12 @@ class FlexSeleniumKeywords(object):
 
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
                                  menu_item_row_index,menu_item_column_index, component_index_in_cell=0):
-        self.sfapi_commands.do_flex_click_menu_bar_ui_component(element_id, menu_bar_item_index, menu_item_row_index,
-                                                                menu_item_column_index, component_index_in_cell)
+        self.sfapi_commands.raw_flex_click_menu_bar_ui_component(element_id,
+                                                                 menu_bar_item_index, menu_item_row_index,
+                                                                 menu_item_column_index, component_index_in_cell)
+
+    def click_data_grid_item_by_label(self, element_id, column_index, label):
+        self.sfapi_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
 
     def create_mouse_down_event(self, element_id):
         return self.sfapi_commands.do_flex_mouse_down(element_id)
@@ -244,6 +248,16 @@ class FlexSeleniumKeywords(object):
     def get_component_info(self, element_id):
         return self.sfapi_commands.get_flex_component_info(element_id)
 
+    def get_data_grid_cell_label(self, element_id, row_index, column_index):
+        return self.sfapi_commands.raw_flex_data_grid_cell_text(element_id, row_index, column_index)
+
+    def get_data_grid_cell_value(self, element_id, row_index, column_index):
+        return self.sfapi_commands.raw_flex_data_grid_cell(element_id, row_index, column_index)
+
+    def get_data_grid_component_label(self, element_id, row_index, column_index, component_index_in_cell=0):
+        return self.sfapi_commands.raw_flex_data_grid_ui_component_label(element_id, row_index, column_index,
+                                                                         component_index_in_cell)
+
     def get_data_grid_field_value_by_row_index(self, element_id, field, row_index):
         return self.sfapi_commands.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
 
@@ -258,9 +272,6 @@ class FlexSeleniumKeywords(object):
 
     def get_data_grid_row_index_by_field_value(self, element_id, field, value):
         return self.sfapi_commands.raw_flex_data_grid_row_index_for_field_value(element_id, field, value)
-
-    def get_data_grid_value(self, element_id, row_index, column_index):
-        return self.sfapi_commands.raw_flex_data_grid_cell(element_id, row_index, column_index)
 
     def get_date(self, element_id):
         return self.sfapi_commands.get_flex_date(element_id)
@@ -382,6 +393,10 @@ class FlexSeleniumKeywords(object):
             true if command succeeds
         """
         return self.sfapi_commands.raw_flex_set_data_grid_cell(element_id, row_index, column_index, value)
+
+    def set_data_grid_checkbox_value(self, element_id, row_index, column_index, value):
+        return self.sfapi_commands.do_flex_data_grid_checkbox(element_id, row_index, column_index,
+                                                              "true" if value else "false")
 
     def set_focus(self, element_id):
         """Set focus to the element.

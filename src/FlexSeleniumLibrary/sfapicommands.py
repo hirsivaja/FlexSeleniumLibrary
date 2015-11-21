@@ -67,9 +67,8 @@ class SeleniumFlexAPICommands(object):
 
     def do_flex_click_menu_bar_ui_component(self, element_id, menu_bar_item_index, menu_item_row_index,
                                             menu_item_column_index, component_index_in_cell=0):
-        return self.call("doFlexClickMenuBarUIComponent", element_id,
-                         "{},{},{},{}".format(menu_bar_item_index, menu_item_row_index,
-                                              menu_item_column_index, component_index_in_cell))
+        raise NotImplementedError("The function call 'doFlexClickMenuBarUIComponent' is not implemented. "
+                                  "Use 'rawFlexClickMenuBarUIComponent' instead.")
 
     def do_flex_data_grid_checkbox(self, element_id, row_index, column_index, checkbox_state):
         return self.call("doFlexDataGridCheckBox", element_id,
@@ -201,7 +200,8 @@ class SeleniumFlexAPICommands(object):
                                   "Use 'rawFlexDataGridCell' instead.")
 
     def get_flex_data_grid_cell_text(self):
-        raise NotImplementedError("The function call 'getFlexDataGridCellText' is not implemented.")
+        raise NotImplementedError("The function call 'getFlexDataGridCellText' is not implemented. "
+                                  "Use 'rawFlexDataGridCellText' instead.")
 
     def get_flex_data_grid_checkbox_checked(self):
         raise NotImplementedError("The function call 'getFlexDataGridCheckBoxChecked' is not implemented.")
@@ -281,11 +281,13 @@ class SeleniumFlexAPICommands(object):
     def get_flex_visible(self, element_id):
         return self.call("getFlexVisible", element_id, '')
 
-    def raw_flex_click_data_grid_item(self):
-        raise NotImplementedError("The function call 'rawFlexClickDataGridItem' is not implemented.")
+    def raw_flex_click_data_grid_item(self, element_id, column_index, item_text):
+        return self.call("rawFlexClickDataGridItem", element_id, column_index, item_text)
 
-    def raw_flex_click_menu_bar_ui_component(self):
-        raise NotImplementedError("The function call 'rawFlexClickMenuBarUIComponent' is not implemented.")
+    def raw_flex_click_menu_bar_ui_component(self, element_id,menu_bar_item_index, menu_item_row_index,
+                                             menu_item_column_index, component_index_in_cell=0):
+        return self.call("rawFlexClickMenuBarUIComponent", element_id, menu_bar_item_index, menu_item_row_index,
+                         menu_item_column_index, component_index_in_cell)
 
     def raw_flex_combo_contains_label(self, element_id, label):
         return self.call("rawFlexComboContainsLabel", element_id, label)
@@ -293,8 +295,8 @@ class SeleniumFlexAPICommands(object):
     def raw_flex_data_grid_cell(self, element_id, row_index, column_index):
         return self.call("rawFlexDataGridCell", element_id, row_index, column_index)
 
-    def raw_flex_data_grid_cell_text(self):
-        raise NotImplementedError("The function call 'rawFlexDataGridCellText' is not implemented.")
+    def raw_flex_data_grid_cell_text(self, element_id, row_index, column_index):
+        return self.call("rawFlexDataGridCellText", element_id, row_index, column_index)
 
     def raw_flex_data_grid_field_label_for_grid_row(self, element_id, field, row):
         return self.call("rawFlexDataGridFieldLabelForGridRow", element_id, field, row)
@@ -308,8 +310,8 @@ class SeleniumFlexAPICommands(object):
     def raw_flex_data_grid_row_index_for_field_label(self, element_id, field, label):
         return self.call("rawFlexDataGridRowIndexForFieldLabel", element_id, field, label)
 
-    def raw_flex_data_grid_ui_component_label(self):
-        raise NotImplementedError("The function call 'rawFlexDataGridUIComponentLabel' is not implemented.")
+    def raw_flex_data_grid_ui_component_label(self, element_id, row_index, column_index, component_index_in_cell=0):
+        return self.call("rawFlexDataGridUIComponentLabel", element_id, row_index, column_index, component_index_in_cell)
 
     def raw_flex_global_position(self, element_id):
         return self.call("rawFlexGlobalPosition", element_id, 'false')

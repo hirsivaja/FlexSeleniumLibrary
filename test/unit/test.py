@@ -85,6 +85,13 @@ class TestCases(unittest.TestCase):
         assert "Clicked: About" == self.flex_selenium.get_alert_text()
         self.flex_selenium.click_alert("OK")
 
+    def test_click_data_grid_item_by_label(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2")
+        assert "Selected item: Element = Element2, 2, false" == self.flex_selenium.get_text("selectedGridItem")
+        self.flex_selenium.click_data_grid_item_by_label("dataGrid", "2", "false")
+        assert "Selected item: Element = Element2, 2, true" == self.flex_selenium.get_text("selectedGridItem")
+
     def test_create_mouse_events(self):
         self.flex_selenium.select_index("buttonBar", mouse_view)
 
@@ -213,6 +220,20 @@ class TestCases(unittest.TestCase):
         info = self.flex_selenium.get_component_info("clickButton").split(',')
         assert len(info) == 4
 
+    def test_get_data_grid_cell_label(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "Element1" == self.flex_selenium.get_data_grid_cell_label("dataGrid", "0", "0")
+        assert "Element3" == self.flex_selenium.get_data_grid_cell_label("dataGrid", "2", "0")
+
+    def test_get_data_grid_cell_value(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "2" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "1", "1")
+        assert "Element3" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "2", "0")
+
+    def test_get_data_grid_component_label(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        print self.flex_selenium.get_data_grid_component_label("dataGrid", "1", "2")
+
     def test_get_data_grid_field_value_by_row_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         assert "Element2" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute1", "1")
@@ -236,11 +257,6 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         assert "2" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute1", "Element3")
         assert "1" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute2", "2")
-
-    def test_get_data_grid_value(self):
-        self.flex_selenium.select_index("buttonBar", data_grid_view)
-        assert "2" == self.flex_selenium.get_data_grid_value("dataGrid", "1", "1")
-        assert "Element3" == self.flex_selenium.get_data_grid_value("dataGrid", "2", "0")
 
     def test_get_date(self):
         pass
@@ -348,8 +364,14 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.set_property("dataGrid", "editable", "true")
         self.flex_selenium.set_data_grid_cell_value("dataGrid", "0", "0", "test")
         self.flex_selenium.set_data_grid_cell_value("dataGrid", "0", "1", "123")
-        assert "test" == self.flex_selenium.get_data_grid_value("dataGrid", "0", "0")
-        assert "123" == self.flex_selenium.get_data_grid_value("dataGrid", "0", "1")
+        assert "test" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "0", "0")
+        assert "123" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "0", "1")
+
+    def test_set_data_grid_checkbox_value(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "true" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "0", "2")
+        self.flex_selenium.set_data_grid_checkbox_value("dataGrid", "0", "2", False)
+        assert "false" == self.flex_selenium.get_data_grid_cell_value("dataGrid", "0", "2")
 
     def test_set_focus(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
