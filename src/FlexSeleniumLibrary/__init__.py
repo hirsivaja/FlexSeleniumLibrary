@@ -1,11 +1,14 @@
 from keywords.flexselenium_keywords import FlexSeleniumKeywords
+from keywords.flexpilot_keywords import FlexPilotKeywords
 from keywords.selenium_keywords import SeleniumKeywords
 from sfapicommands import SeleniumFlexAPICommands
+from flexpilotcommands import FlexPilotCommands
 
 
 class FlexSeleniumLibrary(
             SeleniumKeywords,
-            FlexSeleniumKeywords
+            FlexSeleniumKeywords,
+            FlexPilotKeywords
         ):
     """
     Test library for Adobe/Apache Flex with the help of Selenium2 WebDriver.
@@ -35,11 +38,17 @@ class FlexSeleniumLibrary(
         if browser == 'none':
             self.web_driver = None
             self.flex_selenium = None
-            self.sfapi_commands = None
+            self.sf_api_commands = None
+            self.flex_pilot = None
+            self.flex_pilot_commands = None
         else:
             self.web_driver = self.selenium.open_browser(browser)
-            self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.sleep_after_call)
-            self.sfapi_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call)
+            self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.sleep_after_call,
+                                                      self.sleep_after_fail, self.number_of_retries)
+            self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call,
+                                                           self.sleep_after_fail, self.number_of_retries)
+            self.flex_pilot = FlexPilotKeywords(self.web_driver, self.flash_object_id)
+            self.flex_pilot_commands = FlexPilotCommands(self.web_driver, self.flash_object_id)
 
     def set_flash_app(self, flash_app):
         """Change the flash application name under test. The application name is used to create the JavaScript
@@ -48,7 +57,8 @@ class FlexSeleniumLibrary(
         Args:
             flash_app: the value for the new application. The name of the application.
         """
-        self.sfapi_commands.set_flash_app(flash_app)
+        self.sf_api_commands.set_flash_app(flash_app)
+        self.flex_pilot_commands.set_flash_app(flash_app)
 
     def set_sleep_after_call(self, sleep_after_call):
         """Change the delay after each command issued to the flash application.
@@ -56,7 +66,7 @@ class FlexSeleniumLibrary(
         Args:
             sleep_after_call: the value for the delay
         """
-        self.sfapi_commands.sleep_after_call = sleep_after_call
+        self.sf_api_commands.sleep_after_call = sleep_after_call
 
     def set_sleep_after_fail(self, sleep_after_fail):
         """Change the delay after each failed command attempt to the flash application.
@@ -64,7 +74,7 @@ class FlexSeleniumLibrary(
         Args:
             sleep_after_fail: the value for the delay
         """
-        self.sfapi_commands.sleep_after_fail = sleep_after_fail
+        self.sf_api_commands.sleep_after_fail = sleep_after_fail
 
     def set_number_of_retries(self, number_of_retries):
         """Change the number of retries to execute a command with the flash application.
@@ -74,9 +84,11 @@ class FlexSeleniumLibrary(
         Args:
             number_of_retries: the number of retries before giving up
         """
-        self.sfapi_commands.number_of_retries = number_of_retries
+        self.sf_api_commands.number_of_retries = number_of_retries
 
     def open_browser(self, browser):
         self.web_driver = self.selenium.open_browser(browser)
         self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.sleep_after_call)
-        self.sfapi_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call)
+        self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call)
+        self.flex_pilot = FlexPilotKeywords(self.web_driver, self.flash_object_id)
+        self.flex_pilot_commands = FlexPilotCommands(self.web_driver, self.flash_object_id)
