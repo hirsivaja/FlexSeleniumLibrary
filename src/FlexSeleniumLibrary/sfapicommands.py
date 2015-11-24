@@ -59,7 +59,8 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexClick", element_id, button_label)
 
     def do_flex_click_data_grid_item(self):
-        raise NotImplementedError("The function call 'doFlexClickDataGridItem' is not implemented.")
+        raise NotImplementedError("The function call 'doFlexClickDataGridItem' is not implemented. "
+                                  "Use 'rawFlexClickDataGridItem' instead.")
 
     def do_flex_click_data_grid_ui_component(self, element_id, row_index, column_index, click_first_component_of_cell):
         return self.call("doFlexClickDataGridUIComponent", element_id,
@@ -135,8 +136,8 @@ class SeleniumFlexAPICommands(object):
     def do_flex_refresh_id_tool_tips(self):
         return self.call("doFlexRefreshIDToolTips", '', '')
 
-    def do_flex_right_mouse_down(self):
-        raise NotImplementedError("The function call 'doFlexRightMouseDown' is not implemented.")
+    def do_flex_right_mouse_down(self, element_id):
+        return self.call("doFlexRightMouseDown", element_id, '')
 
     def do_flex_select(self, element_id, item_to_select):
         return self.call("doFlexSelect", element_id, item_to_select)
@@ -167,14 +168,11 @@ class SeleniumFlexAPICommands(object):
     def do_flex_type_append(self, element_id, text):
         return self.call("doFlexTypeAppend", element_id, text)
 
-    def do_flex_wait_for_element(self):
-        raise NotImplementedError("The function call 'doFlexWaitForElement' is not implemented.")
+    def do_flex_wait_for_element(self, element_id, timeout):
+        return self.call("doFlexWaitForElement", element_id, timeout)
 
-    def do_flex_wait_for_element_visible(self):
-        raise NotImplementedError("The function call 'doFlexWaitForElementVisible' is not implemented.")
-
-    def get_flex_as_property(self):
-        raise NotImplementedError("The function call 'getFlexASProperty' is not implemented.")
+    def do_flex_wait_for_element_visible(self, element_id, timeout):
+        return self.call("doFlexWaitForElementVisible", element_id, timeout)
 
     def get_flex_alert_present(self):
         return self.call("getFlexAlertPresent", '', '')
@@ -203,8 +201,8 @@ class SeleniumFlexAPICommands(object):
         raise NotImplementedError("The function call 'getFlexDataGridCellText' is not implemented. "
                                   "Use 'rawFlexDataGridCellText' instead.")
 
-    def get_flex_data_grid_checkbox_checked(self):
-        raise NotImplementedError("The function call 'getFlexDataGridCheckBoxChecked' is not implemented.")
+    def get_flex_data_grid_checkbox_checked(self, element_id, row_index, column_index):
+        return self.call("getFlexDataGridCheckBoxChecked", "{},{},{}".format(element_id, row_index, column_index), "")
 
     def get_flex_data_grid_field_label_for_grid_row(self, element_id, field, row):
         raise NotImplementedError("The function call 'getFlexDataGridFieldLabelForGridRow' is not implemented. "
@@ -226,7 +224,8 @@ class SeleniumFlexAPICommands(object):
                                   "Use 'rawFlexDataGridRowIndexForFieldValue' instead.")
 
     def get_flex_data_grid_ui_component_label(self):
-        raise NotImplementedError("The function call 'getFlexDataGridUIComponentLabel' is not implemented.")
+        raise NotImplementedError("The function call 'getFlexDataGridUIComponentLabel' is not implemented. "
+                                  "Use 'rawFlexDataGridUIComponentLabel' instead.")
 
     def get_flex_date(self, element_id):
         return self.call("getFlexDate", element_id, '')

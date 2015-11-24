@@ -157,6 +157,24 @@ class FlexSeleniumKeywords(object):
                                  .format(element_id, checked))
         return checked == 'true'
 
+    def is_checkbox_in_data_grid_checked(self, element_id, row_index, column_index):
+        """Check if checkbox element located in a data grid is checked.
+
+        Args:
+            element_id: the value of the elements id property.
+            row_index: row where the element is found
+            column_index: column where the element is found
+        Returns:
+            is the element checked as boolean
+        Raises:
+            AssertionError: for other values than True and False
+        """
+        checked = self.sf_api_commands.get_flex_data_grid_checkbox_checked(element_id, row_index, column_index)
+        if checked != 'true' and checked != 'false':
+            raise AssertionError("Checkbox state of '{}[{}][{}]' returned an unexpected value: {}"
+                                 .format(element_id, row_index, column_index, checked))
+        return checked == 'true'
+
     def is_enabled(self, element_id):
         """Check if Flex element is enabled.
 

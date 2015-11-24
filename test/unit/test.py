@@ -1,5 +1,4 @@
 import os
-import time
 import unittest
 
 from src.FlexSeleniumLibrary.keywords.flexselenium_keywords import FlexSeleniumKeywords
@@ -144,8 +143,8 @@ class TestCases(unittest.TestCase):
 
     def test_enter_date(self):
         self.flex_selenium.select_index("buttonBar", date_view)
-        self.flex_selenium.enter_date("dateField", "11.11.2011")
-        assert "Selected date: 11/11/2011" == self.flex_selenium.get_text("selectedDate")
+        self.flex_selenium.enter_date("dateField", "20.11.2011")
+        assert "Selected date: 20/11/2011" == self.flex_selenium.get_text("selectedDate")
 
     def test_enter_text(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -169,6 +168,12 @@ class TestCases(unittest.TestCase):
     def test_is_checkbox_checked(self):
         # Tested by: self.test_select_checkbox()
         pass
+
+    def test_is_checkbox_in_data_grid_checked(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "0", "2")
+        assert not self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "1", "2")
+        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "2", "2")
 
     def test_is_enabled(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -259,10 +264,15 @@ class TestCases(unittest.TestCase):
         assert "1" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute2", "2")
 
     def test_get_date(self):
-        pass
+        self.flex_selenium.select_index("buttonBar", date_view)
+        self.flex_selenium.enter_date("dateField", "20.01.2001")
+        assert "20/01/2001" == self.flex_selenium.get_date("dateField")
 
     def test_get_error_string(self):
-        pass
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert "" == self.flex_selenium.get_error_string("errorButton")
+        self.flex_selenium.click("errorButton")
+        assert "I have an error!" == self.flex_selenium.get_error_string("errorButton")
 
     def test_get_global_position(self):
         position = self.flex_selenium.get_global_position("buttonBar")
