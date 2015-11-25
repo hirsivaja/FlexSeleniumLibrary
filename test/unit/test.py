@@ -73,6 +73,27 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.click_alert("OK")
         assert not self.flex_selenium.is_alert_visible()
 
+    def test_click_data_grid_column_header(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "Element1" == self.flex_selenium.get_data_grid_cell_label("dataGrid", 0, 0)
+        self.flex_selenium.click_data_grid_column_header("dataGrid", 0)
+        self.flex_selenium.click_data_grid_column_header("dataGrid", 0)
+        assert "Element3" == self.flex_selenium.get_data_grid_cell_label("dataGrid", 0, 0)
+
+    def test_click_data_grid_item_by_label(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2")
+        assert "Selected item: Element = Element2, 2, false" == self.flex_selenium.get_text("selectedGridItem")
+        self.flex_selenium.click_data_grid_item_by_label("dataGrid", "2", "false")
+        assert "Selected item: Element = Element2, 2, true" == self.flex_selenium.get_text("selectedGridItem")
+
+    def test_click_data_grid_ui_component(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2")
+        assert "Selected item: Element = Element2, 2, false" == self.flex_selenium.get_text("selectedGridItem")
+        self.flex_selenium.click_data_grid_ui_component("dataGrid", 1, 2)
+        assert "Selected item: Element = Element2, 2, true" == self.flex_selenium.get_text("selectedGridItem")
+
     def test_click_menu_bar_component(self):
         self.flex_selenium.click_menu_bar_component("menuBar", 0, 0, 0)
         assert "Clicked: Buttons view" == self.flex_selenium.get_alert_text()
@@ -83,13 +104,6 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.click_menu_bar_component("menuBar", 1, 0, 0)
         assert "Clicked: About" == self.flex_selenium.get_alert_text()
         self.flex_selenium.click_alert("OK")
-
-    def test_click_data_grid_item_by_label(self):
-        self.flex_selenium.select_index("buttonBar", data_grid_view)
-        self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2")
-        assert "Selected item: Element = Element2, 2, false" == self.flex_selenium.get_text("selectedGridItem")
-        self.flex_selenium.click_data_grid_item_by_label("dataGrid", "2", "false")
-        assert "Selected item: Element = Element2, 2, true" == self.flex_selenium.get_text("selectedGridItem")
 
     def test_create_mouse_events(self):
         self.flex_selenium.select_index("buttonBar", mouse_view)
@@ -145,6 +159,9 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_index("buttonBar", date_view)
         self.flex_selenium.enter_date("dateField", "20.11.2011")
         assert "Selected date: 20/11/2011" == self.flex_selenium.get_text("selectedDate")
+
+    def test_enter_date_to_data_grid_cell(self):
+        pass
 
     def test_enter_text(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -359,6 +376,9 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_combobox_item_by_label("comboBox", "Element = Element3, 3, true")
         assert "Element = Element3, 3, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
 
+    def test_select_combobox_item_by_label_from_data_grid(self):
+        pass
+
     def test_select_index(self):
         assert self.flex_selenium.is_visible("buttonClicks")
         self.flex_selenium.select_index("buttonBar", check_box_view)
@@ -408,3 +428,11 @@ class TestCases(unittest.TestCase):
         assert "10" == self.flex_selenium.get_stepper_value("stepper")
         self.flex_selenium.set_stepper_value("stepper", "30")
         assert "30" == self.flex_selenium.get_stepper_value("stepper")
+
+    def test_wait_for_element_to_exist(self):
+        self.selenium.get(application_url)
+        self.flex_selenium.wait_for_element_to_exist("buttonBar", 10)
+
+    def test_wait_for_element_to_be_visible(self):
+        self.selenium.get(application_url)
+        self.flex_selenium.wait_for_element_to_be_visible("buttonBar", 10)

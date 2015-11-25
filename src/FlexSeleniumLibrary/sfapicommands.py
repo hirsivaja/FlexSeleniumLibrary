@@ -62,9 +62,9 @@ class SeleniumFlexAPICommands(object):
         raise NotImplementedError("The function call 'doFlexClickDataGridItem' is not implemented. "
                                   "Use 'rawFlexClickDataGridItem' instead.")
 
-    def do_flex_click_data_grid_ui_component(self, element_id, row_index, column_index, click_first_component_of_cell):
+    def do_flex_click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
         return self.call("doFlexClickDataGridUIComponent", element_id,
-                         "{},{},{}".format(row_index, column_index, 0 if click_first_component_of_cell else -1))
+                         "{},{},{}".format(row_index, column_index, component_number_in_cell))
 
     def do_flex_click_menu_bar_ui_component(self, element_id, menu_bar_item_index, menu_item_row_index,
                                             menu_item_column_index, component_index_in_cell=0):
@@ -75,7 +75,7 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexDataGridCheckBox", element_id,
                          "{},{},{}".format(row_index, column_index, checkbox_state))
 
-    def do_flex_data_grid_column_header(self, element_id, column_index):
+    def do_flex_data_grid_click_column_header(self, element_id, column_index):
         return self.call("doFlexDataGridClickColumnHeader", element_id, column_index)
 
     def do_flex_data_grid_date(self, element_id, row_index, column_index, date):

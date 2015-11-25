@@ -44,14 +44,21 @@ class FlexSeleniumKeywords(object):
         """
         return self.sf_api_commands.do_flex_alert_response(response)
 
+    def click_data_grid_column_header(self, element_id, column_index):
+        self.sf_api_commands.do_flex_data_grid_click_column_header(element_id, column_index)
+
+    def click_data_grid_item_by_label(self, element_id, column_index, label):
+        self.sf_api_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
+
+    def click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
+        self.sf_api_commands.do_flex_click_data_grid_ui_component(element_id, row_index, column_index,
+                                                                  component_number_in_cell)
+
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
                                  menu_item_row_index, menu_item_column_index, component_index_in_cell=0):
         self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id,
                                                                   menu_bar_item_index, menu_item_row_index,
                                                                   menu_item_column_index, component_index_in_cell)
-
-    def click_data_grid_item_by_label(self, element_id, column_index, label):
-        self.sf_api_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
 
     def create_mouse_down_event(self, element_id):
         return self.sf_api_commands.do_flex_mouse_down(element_id)
@@ -93,6 +100,9 @@ class FlexSeleniumKeywords(object):
             true if success, error text otherwise
         """
         return self.sf_api_commands.do_flex_date(element_id, date_as_text)
+
+    def enter_date_to_data_grid_cell(self, element_id, row_index, column_index, date):
+        return self.sf_api_commands.do_flex_data_grid_date(element_id, row_index, column_index, date)
 
     def enter_text(self, element_id, text, append=False):
         """Enters text to a compatible element such as TextInput
@@ -377,6 +387,10 @@ class FlexSeleniumKeywords(object):
         """
         return self.sf_api_commands.do_flex_select_combo_by_label(element_id, item_to_select)
 
+    def select_combobox_item_by_label_from_data_grid(self, element_id, row_index, column_index, item_to_select):
+        return self.sf_api_commands.do_flex_data_grid_select_combo_by_label(element_id, row_index, column_index,
+                                                                            item_to_select)
+
     def select_index(self, element_id, index_to_select, add_to_selection=False):
         """Select item from compatible element by index.
 
@@ -463,3 +477,9 @@ class FlexSeleniumKeywords(object):
             true if command succeeds
         """
         return self.sf_api_commands.do_flex_stepper(element_id, value)
+
+    def wait_for_element_to_exist(self, element_id, timeout):
+        return self.sf_api_commands.do_flex_wait_for_element(element_id, timeout)
+
+    def wait_for_element_to_be_visible(self, element_id, timeout):
+        return self.sf_api_commands.do_flex_wait_for_element_visible(element_id, timeout)
