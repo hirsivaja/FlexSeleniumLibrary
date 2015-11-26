@@ -19,18 +19,20 @@ class FlexSeleniumLibrary(
     ROBOT_LIBRARY_VERSION = '0.1.0'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, flash_app, browser='firefox', sleep_after_call=0, sleep_after_fail=0.1,
+    def __init__(self, flash_app, browser='firefox', api_version=0.28, sleep_after_call=0, sleep_after_fail=0.1,
                  number_of_retries=30):
         """Initializes the library. Opens a browser instance
 
         Args:
             flash_app: the name for the flash application
             browser: the browser to start. "none", "firefox", "chrome" or "ie". "none" does not start the browser.
+            api_version: the version of SeleniumFlexAPI build into the application
             sleep_after_call: the wait after each executed command. Helpful for manually watching execution
             sleep_after_fail: wait time after each fail before trying again
             number_of_retries: number of times to retry the command
         """
         self.flash_object_id = flash_app
+        self.api_version = api_version
         self.sleep_after_call = sleep_after_call
         self.sleep_after_fail = sleep_after_fail
         self.number_of_retries = number_of_retries
@@ -43,10 +45,12 @@ class FlexSeleniumLibrary(
             self.flex_pilot_commands = None
         else:
             self.web_driver = self.selenium.open_browser(browser)
-            self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.sleep_after_call,
-                                                      self.sleep_after_fail, self.number_of_retries)
-            self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call,
-                                                           self.sleep_after_fail, self.number_of_retries)
+            self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.api_version,
+                                                      self.sleep_after_call, self.sleep_after_fail,
+                                                      self.number_of_retries)
+            self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.api_version,
+                                                           self.sleep_after_call, self.sleep_after_fail,
+                                                           self.number_of_retries)
             self.flex_pilot = FlexPilotKeywords(self.web_driver, self.flash_object_id)
             self.flex_pilot_commands = FlexPilotCommands(self.web_driver, self.flash_object_id)
 
@@ -88,7 +92,9 @@ class FlexSeleniumLibrary(
 
     def open_browser(self, browser):
         self.web_driver = self.selenium.open_browser(browser)
-        self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.sleep_after_call)
-        self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.sleep_after_call)
+        self.flex_selenium = FlexSeleniumKeywords(self.web_driver, self.flash_object_id, self.api_version,
+                                                  self.sleep_after_call)
+        self.sf_api_commands = SeleniumFlexAPICommands(self.web_driver, self.flash_object_id, self.api_version,
+                                                       self.sleep_after_call)
         self.flex_pilot = FlexPilotKeywords(self.web_driver, self.flash_object_id)
         self.flex_pilot_commands = FlexPilotCommands(self.web_driver, self.flash_object_id)
