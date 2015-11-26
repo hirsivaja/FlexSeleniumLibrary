@@ -1,7 +1,7 @@
 *** Settings ***
 
 Documentation    Test cases for Flex Selenium library
-Library    FlexSeleniumLibrary    ${flash_app_name}    none
+Library    FlexSeleniumLibrary    ${flash_app_name}
 Suite Setup    Suite Start
 Suite Teardown    Suite Stop
 Test Setup    Start
@@ -54,11 +54,12 @@ Get Property
 
 *** Keywords ***
 Suite Start
-    Open Browser   ${browser}
+    Open Browser   ${EMPTY}    ${browser}
+    Maximize Browser Window
 
 Suite Stop
-    Exit Browser
+    Close Browser
 
 Start
-    Get   ${flash_app_url}
-    Sleep    1
+    Go to   ${flash_app_url}
+    Is Enabled    buttonBar

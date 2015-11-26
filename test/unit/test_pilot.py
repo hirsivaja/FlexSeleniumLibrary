@@ -1,6 +1,6 @@
 import unittest
 from src.FlexSeleniumLibrary.keywords.flexpilot_keywords import FlexPilotKeywords
-from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
+from Selenium2Library import Selenium2Library
 
 application_name = "Flex4Tester"
 application_url = "http://localhost:8080/flex4test/index.html"
@@ -10,15 +10,18 @@ class TestCases(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.selenium = SeleniumKeywords()
-        cls.flex_pilot = FlexPilotKeywords(cls.selenium.open_browser('firefox'), application_name)
+        cls.selenium = Selenium2Library(run_on_failure='')
+        cls.selenium._run_on_failure_keyword = None
+        cls.selenium.open_browser("")
+        cls.selenium.maximize_browser_window()
+        cls.flex_pilot = FlexPilotKeywords(cls.selenium._current_browser(), application_name)
 
     @classmethod
     def tearDownClass(cls):
-        cls.selenium.exit_browser()
+        cls.selenium.close_browser()
 
     def setUp(self):
-        self.selenium.get(application_url)
+        self.selenium.go_to(application_url)
         # Wait until application ready
         self.flex_pilot.fp_wait_for_flex_ready(10)
 

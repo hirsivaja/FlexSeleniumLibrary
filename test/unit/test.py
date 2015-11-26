@@ -2,7 +2,7 @@ import os
 import unittest
 
 from src.FlexSeleniumLibrary.keywords.flexselenium_keywords import FlexSeleniumKeywords
-from src.FlexSeleniumLibrary.keywords.selenium_keywords import SeleniumKeywords
+from Selenium2Library import Selenium2Library
 
 application_name = "Flex3Tester"
 application_url = "http://localhost:8080/flex3test/index.html"
@@ -10,6 +10,7 @@ application_url = "http://localhost:8080/flex3test/index.html"
 # application_name = "Flex4Tester"
 # application_url = "http://localhost:8080/flex4test/index.html"
 
+api_version = 28
 sleep_after_call = 0
 sleep_after_fail = 0.1
 number_of_retries = 30
@@ -29,16 +30,18 @@ class TestCases(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.selenium = SeleniumKeywords()
-        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium.open_browser('firefox'), application_name,
+        cls.selenium = Selenium2Library(run_on_failure='')
+        cls.selenium.open_browser("")
+        cls.selenium.maximize_browser_window()
+        cls.flex_selenium = FlexSeleniumKeywords(cls.selenium._current_browser(), application_name, api_version,
                                                  sleep_after_call, sleep_after_fail, number_of_retries)
 
     @classmethod
     def tearDownClass(cls):
-        cls.selenium.exit_browser()
+        cls.selenium.close_browser()
 
     def setUp(self):
-        self.selenium.get(application_url)
+        self.selenium.go_to(application_url)
         # Wait until "buttonBar" is found
         self.flex_selenium.is_enabled("buttonBar")
 
@@ -46,7 +49,7 @@ class TestCases(unittest.TestCase):
         file_path = 'screenshot.jpg'
         if os.path.isfile(file_path):
             os.remove(file_path)
-        self.selenium.capture_screenshot(file_path)
+        self.selenium.capture_page_screenshot(file_path)
         assert os.path.isfile(file_path)
         os.remove(file_path)
 
@@ -430,9 +433,9 @@ class TestCases(unittest.TestCase):
         assert "30" == self.flex_selenium.get_stepper_value("stepper")
 
     def test_wait_for_element_to_exist(self):
-        self.selenium.get(application_url)
+        self.selenium.go_to(application_url)
         self.flex_selenium.wait_for_element_to_exist("buttonBar", 10)
 
     def test_wait_for_element_to_be_visible(self):
-        self.selenium.get(application_url)
+        self.selenium.go_to(application_url)
         self.flex_selenium.wait_for_element_to_be_visible("buttonBar", 10)

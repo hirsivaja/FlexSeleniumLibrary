@@ -6,7 +6,7 @@ class FlexSeleniumKeywords(object):
     The keywords that manipulate the Flex application
     """
 
-    def __init__(self, web_driver=None, flash_object_id=None, api_version=0.28, sleep_after_call=0,
+    def __init__(self, web_driver=None, flash_object_id=None, api_version=28, sleep_after_call=0,
                  sleep_after_fail=0.1, number_of_retries=30):
         """Flex keywords
 
