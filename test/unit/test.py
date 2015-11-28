@@ -45,6 +45,21 @@ class TestCases(unittest.TestCase):
         # Wait until "buttonBar" is found
         self.flex_selenium.is_enabled("buttonBar")
 
+    def test_locators(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        # Locating with id:
+        assert "clickButton" == self.flex_selenium.get_property("clickButton", "name")
+        # Locating with property:
+        assert "buttonBar" == self.flex_selenium.get_property("className=ButtonBar", "name")
+        # Locating with child number:
+        assert "radioButtons" == self.flex_selenium.get_property("viewStack/getChildAt:1", "name")
+        # Locating with child and property:
+        assert "clickButton" == self.flex_selenium.get_property("buttons/getChildAt:0/className:Button", "name")
+        # Locating a element using id and grandparent id
+        assert "clickButton" == self.flex_selenium.get_property("viewStack/clickButton", "name")
+        # Get full path with locator
+        assert "viewStack" in self.flex_selenium.get_path_for_locator("viewStack/clickButton")
+
     def test_capture_screenshot(self):
         file_path = 'screenshot.jpg'
         if os.path.isfile(file_path):
@@ -236,6 +251,16 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.click("alertButton")
         assert "Alert! The world has ended!" == self.flex_selenium.get_alert_text()
 
+    def test_get_child_elements(self):
+        children = self.flex_selenium.get_child_elements("viewStack", True, False)
+        assert "viewStack" in children and "buttons" in children
+        children = self.flex_selenium.get_child_elements("viewStack", False, False)
+        assert "viewStack" not in children and "buttons" in children
+        children = self.flex_selenium.get_child_elements("viewStack", True, True)
+        assert "buttons" in children and "viewStack" in children and "radioButtons" not in children
+        children = self.flex_selenium.get_child_elements("viewStack", False, True)
+        assert "buttons" in children and "viewStack" not in children and "radioButtons" not in children
+
     def test_get_combobox_selected_item(self):
         # Tested by: self.test_select_combobox_item_by_label()
         pass
@@ -331,6 +356,10 @@ class TestCases(unittest.TestCase):
     def test_get_stepper_value(self):
         # Tested by: self.test_set_stepper()
         pass
+
+    def test_get_tab_labels(self):
+        self.flex_selenium.select_index("buttonBar", tab_navigator_view)
+        assert "Tab 1,Tab 2,Tab 3" == self.flex_selenium.get_tab_labels("tabNavigator")
 
     def test_get_text(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)

@@ -215,6 +215,12 @@ class SeleniumFlexAPICommands(object):
     def get_flex_checkbox_checked(self, element_id):
         return self.call("getFlexCheckBoxChecked", element_id, '')
 
+    def get_flex_children(self, element_id, full_path, visible):
+        if self.api_version < 28:
+            raise NotImplementedError("The function call 'doFlexGetPathForID' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
+        return self.call("getFlexChildren", element_id, full_path, visible)
+
     def get_flex_combo_contains_label(self, element_id, label):
         raise NotImplementedError("The function call 'getFlexComboContainsLabel' is not implemented. "
                                   "Use 'rawFlexComboContainsLabel' instead.")
@@ -304,6 +310,12 @@ class SeleniumFlexAPICommands(object):
 
     def get_flex_stepper(self, element_id):
         return self.call("getFlexStepper", element_id, '')
+
+    def get_flex_tab_labels(self, element_id):
+        if self.api_version < 28:
+            raise NotImplementedError("The function call 'getFlexTabLabels' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
+        return self.call("getFlexTabLabels", element_id)
 
     def get_flex_text(self, element_id):
         return self.call("getFlexText", element_id, '')

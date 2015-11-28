@@ -270,6 +270,10 @@ class FlexSeleniumKeywords(object):
     def get_alert_text(self):
         return self.sf_api_commands.get_flex_alert_text()
 
+    def get_child_elements(self, element_id, full_path, only_visible_children):
+        return self.sf_api_commands.get_flex_children(element_id, "true" if full_path else "false",
+                                                      "true" if only_visible_children else "false")
+
     def get_combobox_selected_item(self, element_id):
         return self.sf_api_commands.get_flex_selection(element_id)
 
@@ -313,6 +317,16 @@ class FlexSeleniumKeywords(object):
     def get_number_of_selected_items(self, element_id):
         return self.sf_api_commands.get_flex_num_selected_items(element_id)
 
+    def get_path_for_locator(self, element_id, allow_invisible=True):
+        name, parent, visible = self.sf_api_commands.raw_flex_properties(
+            element_id, "name", "parent", "visible").split(',')
+        if "Error: The element '{}' was not found in the application".format(element_id) in name:
+            raise AssertionError(name)
+        path = "{}/{}".format(parent.replace(".", "/"), name)
+        if not allow_invisible and visible == 'false':
+            raise AssertionError("The element '{}' was not visible.".format(path))
+        return path
+
     def get_properties(self, element_id, *flex_properties):
         return self.sf_api_commands.raw_flex_properties(element_id, *flex_properties)
 
@@ -327,6 +341,9 @@ class FlexSeleniumKeywords(object):
 
     def get_stepper_value(self, element_id):
         return self.sf_api_commands.get_flex_stepper(element_id)
+
+    def get_tab_labels(self, element_id):
+        return self.sf_api_commands.get_flex_tab_labels(element_id)
 
     def get_text(self, element_id):
         return self.sf_api_commands.get_flex_text(element_id)
