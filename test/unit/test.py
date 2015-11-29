@@ -24,6 +24,7 @@ data_grid_view = "5"
 tab_navigator_view = "6"
 stepper_view = "7"
 mouse_view = "8"
+tree_view = "9"
 
 
 class TestCases(unittest.TestCase):
@@ -122,6 +123,10 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.click_menu_bar_component("menuBar", 1, 0, 0)
         assert "Clicked: About" == self.flex_selenium.get_alert_text()
         self.flex_selenium.click_alert("OK")
+
+    def test_click_selected_data_grid_item(self):
+        # Tested by: self.test_select_data_grid_index()
+        pass
 
     def test_create_mouse_events(self):
         self.flex_selenium.select_index("buttonBar", mouse_view)
@@ -411,6 +416,13 @@ class TestCases(unittest.TestCase):
     def test_select_combobox_item_by_label_from_data_grid(self):
         pass
 
+    def test_select_data_grid_index(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "Selected item: " == self.flex_selenium.get_text("selectedGridItem")
+        self.flex_selenium.select_data_grid_index("dataGrid", "2")
+        self.flex_selenium.click_selected_data_grid_item("dataGrid")
+        assert "Selected item: Element = Element3, 3, true" == self.flex_selenium.get_text("selectedGridItem")
+
     def test_select_index(self):
         assert self.flex_selenium.is_visible("buttonClicks")
         self.flex_selenium.select_index("buttonBar", check_box_view)
@@ -425,6 +437,15 @@ class TestCases(unittest.TestCase):
     def test_select_radiobutton(self):
         # Tested by: self.test_is_radiobutton_checked()
         pass
+
+    def test_select_tree_item(self):
+        self.flex_selenium.select_index("buttonBar", tree_view)
+        self.flex_selenium.select_tree_item("tree", "node", "Node1")
+        assert "Selected item: Node1" == self.flex_selenium.get_text("selectedTreeItem")
+        self.flex_selenium.select_tree_item("tree", "node", "Node1Item1")
+        assert "Selected item: Node1Item1" == self.flex_selenium.get_text("selectedTreeItem")
+        self.flex_selenium.select_tree_item("tree", "node", "Node1Item3SubItem2")
+        assert "Selected item: Node1Item3SubItem2" == self.flex_selenium.get_text("selectedTreeItem")
 
     def test_set_data_grid_cell_value(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)

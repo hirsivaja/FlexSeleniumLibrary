@@ -60,6 +60,9 @@ class FlexSeleniumKeywords(object):
                                                                   menu_bar_item_index, menu_item_row_index,
                                                                   menu_item_column_index, component_index_in_cell)
 
+    def click_selected_data_grid_item(self, element_id):
+        self.sf_api_commands.do_flex_click_selected_data_grid_item(element_id)
+
     def create_mouse_down_event(self, element_id):
         return self.sf_api_commands.do_flex_mouse_down(element_id)
 
@@ -408,6 +411,9 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_data_grid_select_combo_by_label(element_id, row_index, column_index,
                                                                             item_to_select)
 
+    def select_data_grid_index(self, element_id, index_to_select):
+        return self.sf_api_commands.do_flex_select_data_grid_index(element_id, index_to_select)
+
     def select_index(self, element_id, index_to_select, add_to_selection=False):
         """Select item from compatible element by index.
 
@@ -422,6 +428,9 @@ class FlexSeleniumKeywords(object):
             return self.sf_api_commands.do_flex_add_select_index(element_id, index_to_select)
         else:
             return self.sf_api_commands.do_flex_select_index(element_id, index_to_select)
+
+    def select_tree_item(self, element_id, property_name, *search_words):
+        return self.sf_api_commands.do_flex_select_tree_item(element_id, property_name, *search_words)
 
     def set_checkbox_value(self, element_id, value):
         """Set checkbox value to true or false.

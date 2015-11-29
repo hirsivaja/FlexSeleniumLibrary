@@ -76,6 +76,9 @@ class SeleniumFlexAPICommands(object):
         raise NotImplementedError("The function call 'doFlexClickMenuBarUIComponent' is not implemented. "
                                   "Use 'rawFlexClickMenuBarUIComponent' instead.")
 
+    def do_flex_click_selected_data_grid_item(self, element_id):
+        return self.call("doFlexClickSelectedDataGridItem", element_id, '')
+
     def do_flex_data_grid_checkbox(self, element_id, row_index, column_index, checkbox_state):
         if self.api_version < 28:
             raise NotImplementedError("The function call 'doFlexDataGridCheckBox' is not implemented. "
@@ -178,8 +181,14 @@ class SeleniumFlexAPICommands(object):
     def do_flex_select_combo_by_label(self, element_id, item_to_select):
         return self.call("doFlexSelectComboByLabel", element_id, item_to_select)
 
+    def do_flex_select_data_grid_index(self, element_id, index_to_select):
+        return self.call("doFlexSelectDataGridIndex", element_id, index_to_select)
+
     def do_flex_select_index(self, element_id, index_to_select):
         return self.call("doFlexSelectIndex", element_id, index_to_select)
+
+    def do_flex_select_tree_item(self, element_id, property_name, *search_words):
+        return self.call("doFlexSelectTreeItem", element_id, "{}|,|{}".format(property_name, "#,#".join(search_words)))
 
     def do_flex_set_data_grid_cell(self, element_id, row_index, column_index, value):
         raise NotImplementedError("The function call 'doFlexSetDataGridCell' is not implemented. "
