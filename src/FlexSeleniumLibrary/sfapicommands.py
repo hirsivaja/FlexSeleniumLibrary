@@ -86,6 +86,12 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexDataGridCheckBox", element_id,
                          "{},{},{}".format(row_index, column_index, checkbox_state))
 
+    def do_flex_combo_send_event(self, element_id, event):
+        if self.api_version < 28:
+            raise NotImplementedError("The function call 'doFlexComboSendEvent' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
+        return self.call("doFlexComboSendEvent", element_id, event)
+
     def do_flex_data_grid_click_column_header(self, element_id, column_index):
         if self.api_version < 28:
             raise NotImplementedError("The function call 'doFlexDataGridClickColumnHeader' is not implemented. "
@@ -233,6 +239,12 @@ class SeleniumFlexAPICommands(object):
     def get_flex_combo_contains_label(self, element_id, label):
         raise NotImplementedError("The function call 'getFlexComboContainsLabel' is not implemented. "
                                   "Use 'rawFlexComboContainsLabel' instead.")
+
+    def get_flex_combo_values(self, element_id):
+        if self.api_version < 28:
+            raise NotImplementedError("The function call 'getFlexComboValues' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
+        return self.call("getFlexComboValues", element_id)
 
     def get_flex_component_info(self, element_id):
         return self.call("getFlexComponentInfo", element_id)

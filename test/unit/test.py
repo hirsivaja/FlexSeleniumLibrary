@@ -270,6 +270,10 @@ class TestCases(unittest.TestCase):
         # Tested by: self.test_select_combobox_item_by_label()
         pass
 
+    def test_get_combobox_values(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert "Element = Element2, 2, false" in self.flex_selenium.get_combobox_values("comboBox")
+
     def test_get_component_info(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         info = self.flex_selenium.get_component_info("clickButton").split(',')

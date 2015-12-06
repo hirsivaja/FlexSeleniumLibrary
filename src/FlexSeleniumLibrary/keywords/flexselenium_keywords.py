@@ -45,23 +45,26 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_alert_response(response)
 
     def click_data_grid_column_header(self, element_id, column_index):
-        self.sf_api_commands.do_flex_data_grid_click_column_header(element_id, column_index)
+        return self.sf_api_commands.do_flex_data_grid_click_column_header(element_id, column_index)
 
     def click_data_grid_item_by_label(self, element_id, column_index, label):
-        self.sf_api_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
+        return self.sf_api_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
 
     def click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
-        self.sf_api_commands.do_flex_click_data_grid_ui_component(element_id, row_index, column_index,
+        return self.sf_api_commands.do_flex_click_data_grid_ui_component(element_id, row_index, column_index,
                                                                   component_number_in_cell)
 
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
                                  menu_item_row_index, menu_item_column_index, component_index_in_cell=0):
-        self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id,
+        return self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id,
                                                                   menu_bar_item_index, menu_item_row_index,
                                                                   menu_item_column_index, component_index_in_cell)
 
     def click_selected_data_grid_item(self, element_id):
-        self.sf_api_commands.do_flex_click_selected_data_grid_item(element_id)
+        return self.sf_api_commands.do_flex_click_selected_data_grid_item(element_id)
+
+    def create_dropdown_event(self, element_id, open_event=True):
+        return self.sf_api_commands.do_flex_combo_send_event(element_id, "open" if open_event else "close")
 
     def create_mouse_down_event(self, element_id):
         return self.sf_api_commands.do_flex_mouse_down(element_id)
@@ -279,6 +282,9 @@ class FlexSeleniumKeywords(object):
 
     def get_combobox_selected_item(self, element_id):
         return self.sf_api_commands.get_flex_selection(element_id)
+
+    def get_combobox_values(self, element_id):
+        return self.sf_api_commands.get_flex_combo_values(element_id).split("#;#")
 
     def get_component_info(self, element_id):
         return self.sf_api_commands.get_flex_component_info(element_id)
