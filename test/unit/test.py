@@ -293,10 +293,26 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         print self.flex_selenium.get_data_grid_component_label("dataGrid", "1", "2")
 
+    def test_get_data_grid_field_count(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "3" == self.flex_selenium.get_data_grid_field_count("dataGrid", True)
+        assert "3" == self.flex_selenium.get_data_grid_field_count("dataGrid", False)
+
+    def test_get_data_grid_field_data_fields(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "attribute1" in self.flex_selenium.get_data_grid_field_data_fields("dataGrid", True)
+        assert "attribute3" in self.flex_selenium.get_data_grid_field_data_fields("dataGrid", False)
+
     def test_get_data_grid_field_value_by_row_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         assert "Element2" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute1", "1")
         assert "3" == self.flex_selenium.get_data_grid_field_value_by_row_index("dataGrid", "attribute2", "2")
+
+    def test_get_data_grid_field_values(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "2" in self.flex_selenium.get_data_grid_field_values("dataGrid", "1")
+        assert "false" in self.flex_selenium.get_data_grid_field_values("dataGrid", "2")
+        # assert "2" in self.flex_selenium.get_data_grid_field_values("dataGrid", "1", False)
 
     def test_get_data_grid_field_label_by_row_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
@@ -316,6 +332,11 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
         assert "2" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute1", "Element3")
         assert "1" == self.flex_selenium.get_data_grid_row_index_by_field_value("dataGrid", "attribute2", "2")
+
+    def test_get_data_grid_values(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert "Element1" in self.flex_selenium.get_data_grid_values("dataGrid", True)[0]
+        assert "false" in self.flex_selenium.get_data_grid_values("dataGrid", False)[1]
 
     def test_get_date(self):
         self.flex_selenium.select_index("buttonBar", date_view)

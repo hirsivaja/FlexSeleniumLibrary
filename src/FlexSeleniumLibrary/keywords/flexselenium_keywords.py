@@ -141,6 +141,9 @@ class FlexSeleniumKeywords(object):
                                  .format(element_id, exists))
         return exists == 'true'
 
+    def expand_data_grid_elements(self, element_id):
+        return self.sf_api_commands.do_flex_data_grid_expand_all(element_id)
+
     def is_alert_visible(self):
         """Check if Flex alert is visible.
 
@@ -299,11 +302,23 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.raw_flex_data_grid_ui_component_label(element_id, row_index, column_index,
                                                                           component_index_in_cell)
 
-    def get_data_grid_field_value_by_row_index(self, element_id, field, row_index):
-        return self.sf_api_commands.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
+    def get_data_grid_field_count(self, element_id, only_visible):
+        return self.sf_api_commands.get_flex_data_grid_col_count(element_id, only_visible)
+
+    def get_data_grid_field_data_fields(self, element_id, only_visible):
+        return self.sf_api_commands.get_flex_data_grid_col_data_fields(element_id, only_visible).split("|")
 
     def get_data_grid_field_label_by_row_index(self, element_id, field, row):
         return self.sf_api_commands.raw_flex_data_grid_field_label_for_grid_row(element_id, field, row)
+
+    def get_data_grid_field_value_by_row_index(self, element_id, field, row_index):
+        return self.sf_api_commands.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
+
+    def get_data_grid_field_values(self, element_id, field, extra_data=None):
+        if extra_data is not None:
+            return self.sf_api_commands.raw_flex_data_grid_field_all_values(element_id, field, extra_data)
+        else:
+            return self.sf_api_commands.raw_flex_data_grid_field_values_for_column(element_id, field).split("#;#")
 
     def get_data_grid_row_count(self, element_id):
         return self.sf_api_commands.get_flex_data_grid_row_count(element_id)
@@ -313,6 +328,14 @@ class FlexSeleniumKeywords(object):
 
     def get_data_grid_row_index_by_field_value(self, element_id, field, value):
         return self.sf_api_commands.raw_flex_data_grid_row_index_for_field_value(element_id, field, value)
+
+    def get_data_grid_values(self, element_id, only_visible):
+        value_rows = self.sf_api_commands.get_flex_data_grid_values(element_id,
+                                                                    only_visible).split("##ITEM####ROW####ITEM##")
+        result = []
+        for row in value_rows:
+            result.append(row.split("##ITEM##"))
+        return result
 
     def get_date(self, element_id):
         return self.sf_api_commands.get_flex_date(element_id)
