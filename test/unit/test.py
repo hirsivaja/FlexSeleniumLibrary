@@ -14,6 +14,7 @@ api_version = 28
 sleep_after_call = 0
 sleep_after_fail = 0.1
 number_of_retries = 30
+ensure_timeout = 30
 
 buttons_view = "0"
 radio_buttons_view = "1"
@@ -35,7 +36,7 @@ class TestCases(unittest.TestCase):
         cls.selenium.open_browser("")
         cls.selenium.maximize_browser_window()
         cls.flex_selenium = FlexSeleniumKeywords(cls.selenium._current_browser(), application_name, api_version,
-                                                 sleep_after_call, sleep_after_fail, number_of_retries)
+                                                 sleep_after_call, sleep_after_fail, number_of_retries, ensure_timeout)
 
     @classmethod
     def tearDownClass(cls):
@@ -44,7 +45,7 @@ class TestCases(unittest.TestCase):
     def setUp(self):
         self.selenium.go_to(application_url)
         # Wait until "buttonBar" is found
-        self.flex_selenium.is_enabled("buttonBar")
+        self.flex_selenium.ensure_enabled_state("buttonBar", True)
 
     def test_locators(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)

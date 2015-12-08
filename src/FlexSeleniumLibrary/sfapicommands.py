@@ -4,13 +4,14 @@ from selenium.common.exceptions import WebDriverException
 
 class SeleniumFlexAPICommands(object):
     def __init__(self, web_driver, flash_object_id, api_version=28, sleep_after_call=0, sleep_after_fail=0.1,
-                 number_of_retries=30):
+                 number_of_retries=30, ensure_timeout=30):
         self.web_driver = web_driver
         self.flash_object_id = flash_object_id
         self.api_version = api_version
         self.sleep_after_call = sleep_after_call
         self.sleep_after_fail = sleep_after_fail
         self.number_of_retries = number_of_retries
+        self.ensure_timeout = ensure_timeout
 
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
@@ -44,6 +45,18 @@ class SeleniumFlexAPICommands(object):
         if self.sleep_after_call > 0:
             time.sleep(self.sleep_after_call)
         return result
+
+    def ensure_result(self, expected_result, function, *function_parameters):
+        tries = self.ensure_timeout / self.sleep_after_fail
+        while True:
+            result = function(*function_parameters)
+            if result == expected_result:
+                return result
+            if tries < 1:
+                raise AssertionError("Could not ensure result '{}' for function '{}'. Last result was '{}'".format(
+                    expected_result, function, result))
+            tries -= 1
+            time.sleep(self.sleep_after_fail)
 
     def do_flex_add_select_index(self, element_id, index):
         return self.call("doFlexAddSelectIndex", element_id, index)

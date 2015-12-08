@@ -7,7 +7,7 @@ class FlexSeleniumKeywords(object):
     """
 
     def __init__(self, web_driver=None, flash_object_id=None, api_version=28, sleep_after_call=0,
-                 sleep_after_fail=0.1, number_of_retries=30):
+                 sleep_after_fail=0.1, number_of_retries=30, ensure_timeout=30):
         """Flex keywords
 
         Args:
@@ -18,7 +18,7 @@ class FlexSeleniumKeywords(object):
             number_of_retries: number of times to retry the command
         """
         self.sf_api_commands = SeleniumFlexAPICommands(web_driver, flash_object_id, api_version, sleep_after_call,
-                                                       sleep_after_fail, number_of_retries)
+                                                       sleep_after_fail, number_of_retries, ensure_timeout)
 
     def add_notification(self, message):
         return self.sf_api_commands.do_flex_notify(message)
@@ -52,13 +52,13 @@ class FlexSeleniumKeywords(object):
 
     def click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
         return self.sf_api_commands.do_flex_click_data_grid_ui_component(element_id, row_index, column_index,
-                                                                  component_number_in_cell)
+                                                                         component_number_in_cell)
 
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
                                  menu_item_row_index, menu_item_column_index, component_index_in_cell=0):
-        return self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id,
-                                                                  menu_bar_item_index, menu_item_row_index,
-                                                                  menu_item_column_index, component_index_in_cell)
+        return self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id, menu_bar_item_index,
+                                                                         menu_item_row_index, menu_item_column_index,
+                                                                         component_index_in_cell)
 
     def click_selected_data_grid_item(self, element_id):
         return self.sf_api_commands.do_flex_click_selected_data_grid_item(element_id)
@@ -124,6 +124,15 @@ class FlexSeleniumKeywords(object):
             return self.sf_api_commands.do_flex_type_append(element_id, text)
         else:
             return self.sf_api_commands.do_flex_type(element_id, text)
+
+    def ensure_enabled_state(self, element_id, expected_enabled_state):
+        self.sf_api_commands.ensure_result(expected_enabled_state, self.is_enabled, element_id)
+
+    def ensure_exists(self, element_id, expected_existing_state):
+        self.sf_api_commands.ensure_result(expected_existing_state, self.exists, element_id)
+
+    def ensure_visibility(self, element_id, expected_visibility):
+        self.sf_api_commands.ensure_result(expected_visibility, self.is_visible, element_id)
 
     def exists(self, element_id):
         """Check if Flex element exists.
