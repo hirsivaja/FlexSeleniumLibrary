@@ -25,6 +25,9 @@ class SeleniumFlexAPICommands(object):
     def set_number_of_retries(self, number_of_retries):
         self.number_of_retries = number_of_retries
 
+    def set_api_version(self, api_version):
+        self.api_version = api_version
+
     def call(self, function_name, *function_parameters):
         if self.web_driver is None:
             raise AssertionError("WebDriver is not initialized!")
@@ -57,6 +60,15 @@ class SeleniumFlexAPICommands(object):
                     expected_result, function, result))
             tries -= 1
             time.sleep(self.sleep_after_fail)
+
+    def is_function_defined(self, function_name):
+        script = "return document.{}.{};".format(self.flash_object_id, function_name)
+        result = self.web_driver.execute_script(script)
+        if result is None:
+            return False
+        if "{}()".format(function_name) in result:
+            return True
+        raise AssertionError("Unknown result for function existence: {}".format(result))
 
     def do_flex_add_select_index(self, element_id, index):
         return self.call("doFlexAddSelectIndex", element_id, index)
@@ -252,6 +264,9 @@ class SeleniumFlexAPICommands(object):
 
     def get_flex_alert_text_present(self):
         raise NotImplementedError("The function call 'getFlexAlertTextPresent' is not implemented.")
+
+    def get_flex_api_version(self):
+        return self.call("getFlexAPIVersion")
 
     def get_flex_checkbox_checked(self, element_id):
         return self.call("getFlexCheckBoxChecked", element_id, '')

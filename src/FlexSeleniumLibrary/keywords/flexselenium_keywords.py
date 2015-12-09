@@ -203,6 +203,9 @@ class FlexSeleniumKeywords(object):
                                  .format(element_id, row_index, column_index, checked))
         return checked == 'true'
 
+    def is_function_defined(self, function_name):
+        return self.sf_api_commands.is_function_defined(function_name)
+
     def is_enabled(self, element_id):
         """Check if Flex element is enabled.
 
@@ -287,6 +290,11 @@ class FlexSeleniumKeywords(object):
 
     def get_alert_text(self):
         return self.sf_api_commands.get_flex_alert_text()
+
+    def get_api_version(self):
+        if self.is_function_defined("getFlexAPIVersion"):
+            return self.sf_api_commands.get_flex_api_version().split(".")[1]
+        return 26
 
     def get_child_elements(self, element_id, full_path, only_visible_children):
         return self.sf_api_commands.get_flex_children(element_id, "true" if full_path else "false",

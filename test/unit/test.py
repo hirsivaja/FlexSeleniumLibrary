@@ -10,7 +10,7 @@ application_url = "http://localhost:8080/flex3test/index.html"
 # application_name = "Flex4Tester"
 # application_url = "http://localhost:8080/flex4test/index.html"
 
-api_version = 28
+api_version = 0
 sleep_after_call = 0
 sleep_after_fail = 0.1
 number_of_retries = 30
@@ -46,6 +46,7 @@ class TestCases(unittest.TestCase):
         self.selenium.go_to(application_url)
         # Wait until "buttonBar" is found
         self.flex_selenium.ensure_enabled_state("buttonBar", True)
+        self.flex_selenium.sf_api_commands.set_api_version(self.flex_selenium.get_api_version())
 
     def test_locators(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
