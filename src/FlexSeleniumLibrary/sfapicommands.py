@@ -85,65 +85,74 @@ class SeleniumFlexAPICommands(object):
     def do_flex_click(self, element_id, button_label):
         return self.call("doFlexClick", element_id, button_label)
 
-    def do_flex_click_data_grid_item(self):
-        raise NotImplementedError("The function call 'doFlexClickDataGridItem' is not implemented. "
-                                  "Use 'rawFlexClickDataGridItem' instead.")
+    def do_flex_click_data_grid_item(self, element_id, column_index, item_text):
+        return self.raw_flex_click_data_grid_item(element_id, column_index, item_text)
 
     def do_flex_click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
         if self.api_version < 28:
-            raise NotImplementedError("The function call 'doFlexClickDataGridUIComponent' is not implemented. "
-                                      "Update to newer version of Selenium Flex API.")
+            return self.call("doFlexClickDataGridUIComponent", element_id, row_index, column_index,
+                             component_number_in_cell)
         return self.call("doFlexClickDataGridUIComponent", element_id,
                          "{},{},{}".format(row_index, column_index, component_number_in_cell))
 
     def do_flex_click_menu_bar_ui_component(self, element_id, menu_bar_item_index, menu_item_row_index,
                                             menu_item_column_index, component_index_in_cell=0):
-        raise NotImplementedError("The function call 'doFlexClickMenuBarUIComponent' is not implemented. "
-                                  "Use 'rawFlexClickMenuBarUIComponent' instead.")
+        return self.raw_flex_click_menu_bar_ui_component(element_id, menu_bar_item_index, menu_item_row_index,
+                                                         menu_item_column_index, component_index_in_cell)
 
     def do_flex_click_selected_data_grid_item(self, element_id):
+        if self.api_version < 27:
+            raise NotImplementedError("The function call 'doFlexClickSelectedDataGridItem' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
         return self.call("doFlexClickSelectedDataGridItem", element_id, '')
 
     def do_flex_data_grid_checkbox(self, element_id, row_index, column_index, checkbox_state):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridCheckBox' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("doFlexDataGridCheckBox", element_id,
                          "{},{},{}".format(row_index, column_index, checkbox_state))
 
     def do_flex_combo_send_event(self, element_id, event):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexComboSendEvent' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("doFlexComboSendEvent", element_id, event)
 
     def do_flex_data_grid_click_column_header(self, element_id, column_index):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridClickColumnHeader' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
+        elif self.api_version < 28:
+            return self.call("flexDataGridClickHeader", element_id, "{},DESC".format(column_index))
         return self.call("doFlexDataGridClickColumnHeader", element_id, column_index)
 
     def do_flex_data_grid_date(self, element_id, row_index, column_index, date):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridDate' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("doFlexDataGridDate", element_id, "{},{},{}".format(row_index, column_index, date))
 
     def do_flex_data_grid_expand_all(self, element_id):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridExpandAll' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
+        elif self.api_version < 28:
+            return self.call("flexDataGridExpandAll", element_id)
         return self.call("doFlexDataGridExpandAll", element_id)
 
     def do_flex_data_grid_search_value(self, element_id, item_name, item_property, property_value):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridSearchValue' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
+        elif self.api_version < 28:
+            return self.call("flexDataGridSearchValue", element_id, "{},{},{}".format(item_name, item_property,
+                                                                                    property_value))
         return self.call("doFlexDataGridSearchValue", element_id, "{},{},{}".format(item_name, item_property,
                                                                                     property_value))
 
     def do_flex_data_grid_select_combo_by_label(self, element_id, row_index, column_index, label):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'doFlexDataGridSelectComboByLabel' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("doFlexDataGridSelectComboByLabel", element_id,
@@ -163,6 +172,12 @@ class SeleniumFlexAPICommands(object):
 
     def do_flex_drag_to(self, element_id, x, y):
         return self.call("doFlexDragTo", element_id, '{},{}'.format(x, y))
+
+    def do_flex_enter_key(self, element_id):
+        if self.api_version > 27:
+            raise NotImplementedError("The function call 'doFlexEnterKey' is not implemented. "
+                                      "The call was replaced with 'doFlexKeyDown' and 'doFlexKeyUp'.")
+        return self.call("doFlexEnterKey", element_id, '')
 
     def do_flex_key_down(self, element_id, key_code):
         if self.api_version < 28:
@@ -202,7 +217,7 @@ class SeleniumFlexAPICommands(object):
 
     def do_flex_property(self, element_id, flex_property, value):
         if self.api_version < 28:
-            raise NotImplementedError("The function call 'doFlexProperty' is not implemented. "
+            raise NotImplementedError("The function call 'doFlexProperty' is not working. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("doFlexProperty", "{}\.{}".format(element_id, flex_property), value)
 
@@ -219,24 +234,28 @@ class SeleniumFlexAPICommands(object):
         return self.call("doFlexSelect", element_id, item_to_select)
 
     def do_flex_select_matching_on_field(self, element_id, underlying_field, underlying_value):
-        raise NotImplementedError("The function call 'doFlexSelectMatchingOnField' is not implemented. "
-                                  "Use 'rawFlexSelectMatchingOnField' instead.")
+        return self.raw_flex_select_matching_on_field(element_id, underlying_field, underlying_value)
 
     def do_flex_select_combo_by_label(self, element_id, item_to_select):
         return self.call("doFlexSelectComboByLabel", element_id, item_to_select)
 
     def do_flex_select_data_grid_index(self, element_id, index_to_select):
+        if self.api_version < 27:
+            raise NotImplementedError("The function call 'doFlexSelectDataGridIndex' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
         return self.call("doFlexSelectDataGridIndex", element_id, index_to_select)
 
     def do_flex_select_index(self, element_id, index_to_select):
         return self.call("doFlexSelectIndex", element_id, index_to_select)
 
     def do_flex_select_tree_item(self, element_id, property_name, *search_words):
+        if self.api_version < 27:
+            raise NotImplementedError("The function call 'doFlexSelectTreeItem' is not implemented. "
+                                      "Update to newer version of Selenium Flex API.")
         return self.call("doFlexSelectTreeItem", element_id, "{}|,|{}".format(property_name, "#,#".join(search_words)))
 
     def do_flex_set_data_grid_cell(self, element_id, row_index, column_index, value):
-        raise NotImplementedError("The function call 'doFlexSetDataGridCell' is not implemented. "
-                                  "Use 'rawFlexSetDataGridCell' instead.")
+        return self.raw_flex_set_data_grid_cell(element_id, row_index, column_index, value)
 
     def do_flex_set_focus(self, element_id):
         return self.call("doFlexSetFocus", element_id)
@@ -269,60 +288,61 @@ class SeleniumFlexAPICommands(object):
         return self.call("getFlexAPIVersion")
 
     def get_flex_checkbox_checked(self, element_id):
+        if self.api_version < 27:
+            pass
+        elif self.api_version < 28:
+            return self.call("getFlexCheckBoxChecked", element_id)
         return self.call("getFlexCheckBoxChecked", element_id, '')
 
     def get_flex_children(self, element_id, full_path, visible):
-        if self.api_version < 28:
-            raise NotImplementedError("The function call 'doFlexGetPathForID' is not implemented. "
+        if self.api_version < 27:
+            raise NotImplementedError("The function call 'getFlexChildren' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("getFlexChildren", element_id, full_path, visible)
 
     def get_flex_combo_contains_label(self, element_id, label):
-        raise NotImplementedError("The function call 'getFlexComboContainsLabel' is not implemented. "
-                                  "Use 'rawFlexComboContainsLabel' instead.")
+        return self.raw_flex_combo_contains_label(element_id, label)
 
     def get_flex_combo_values(self, element_id):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexComboValues' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
+        elif self.api_version < 28:
+            return self.call("doFlexGetComboValues", element_id)
         return self.call("getFlexComboValues", element_id)
 
     def get_flex_component_info(self, element_id):
         return self.call("getFlexComponentInfo", element_id)
 
     def get_flex_data_grid_cell(self, element_id, row_index, column_index):
-        raise NotImplementedError("The function call 'getFlexDataGridCell' is not implemented. "
-                                  "Use 'rawFlexDataGridCell' instead.")
+        return self.raw_flex_data_grid_cell(element_id, row_index, column_index)
 
-    def get_flex_data_grid_cell_text(self):
-        raise NotImplementedError("The function call 'getFlexDataGridCellText' is not implemented. "
-                                  "Use 'rawFlexDataGridCellText' instead.")
+    def get_flex_data_grid_cell_text(self, element_id, row_index, column_index):
+        return self.raw_flex_data_grid_cell_text(element_id, row_index, column_index)
 
     def get_flex_data_grid_checkbox_checked(self, element_id, row_index, column_index):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexDataGridCheckBoxChecked' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("getFlexDataGridCheckBoxChecked", "{},{},{}".format(element_id, row_index, column_index), "")
 
     def get_flex_data_grid_col_count(self, element_id, only_visible):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexDataGridColCount' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("getFlexDataGridColCount", element_id, "true" if only_visible else "false")
 
     def get_flex_data_grid_col_data_fields(self, element_id, only_visible):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexDataGridColDataFields' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("getFlexDataGridColDataFields", element_id, "true" if only_visible else "false")
 
     def get_flex_data_grid_field_label_for_grid_row(self, element_id, field, row):
-        raise NotImplementedError("The function call 'getFlexDataGridFieldLabelForGridRow' is not implemented. "
-                                  "Use 'rawFlexDataGridFieldLabelForGridRow' instead.")
+        return self.raw_flex_data_grid_field_label_for_grid_row(element_id, field, row)
 
     def get_flex_data_grid_field_value_for_grid_row(self, element_id, field, row_index):
-        raise NotImplementedError("The function call 'getFlexDataGridFieldValueForGridRow' is not implemented. "
-                                  "Use 'rawFlexDataGridFieldValueForGridRow' instead.")
+        return self.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
 
     def get_flex_data_grid_row_count(self, element_id):
         if self.api_version < 28:
@@ -330,21 +350,20 @@ class SeleniumFlexAPICommands(object):
         return self.call("getFlexDataGridRowCount", element_id, '')
 
     def get_flex_data_grid_row_index_for_field_label(self, element_id, field, label):
-        raise NotImplementedError("The function call 'getFlexDataGridRowIndexForFieldLabel' is not implemented. "
-                                  "Use 'rawFlexDataGridRowIndexForFieldLabel' instead.")
+        return self.raw_flex_data_grid_row_index_for_field_label(element_id, field, label)
 
     def get_flex_data_grid_row_index_for_field_value(self, element_id, field, value):
-        raise NotImplementedError("The function call 'getFlexDataGridRowIndexForFieldValue' is not implemented. "
-                                  "Use 'rawFlexDataGridRowIndexForFieldValue' instead.")
+        return self.raw_flex_data_grid_row_index_for_field_value(element_id, field, value)
 
-    def get_flex_data_grid_ui_component_label(self):
-        raise NotImplementedError("The function call 'getFlexDataGridUIComponentLabel' is not implemented. "
-                                  "Use 'rawFlexDataGridUIComponentLabel' instead.")
+    def get_flex_data_grid_ui_component_label(self, element_id, row_index, column_index, component_index_in_cell):
+        return self.raw_flex_data_grid_ui_component_label(element_id, row_index, column_index, component_index_in_cell)
 
     def get_flex_data_grid_values(self, element_id, only_visible):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexDataGridValues' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
+        elif self.api_version < 28:
+            return self.call("getDataGridValues", element_id, "true" if only_visible else "false")
         return self.call("getFlexDataGridValues", element_id, "true" if only_visible else "false")
 
     def get_flex_date(self, element_id):
@@ -360,8 +379,7 @@ class SeleniumFlexAPICommands(object):
         return self.call("getFlexExists", element_id, '')
 
     def get_flex_global_position(self, element_id):
-        raise NotImplementedError("The function call 'getFlexGlobalPosition' is not implemented. "
-                                  "Use 'rawFlexGlobalPosition' instead.")
+        return self.raw_flex_global_position(element_id)
 
     def get_flex_num_selected_items(self, element_id):
         return self.call("getFlexNumSelectedItems", element_id)
@@ -373,8 +391,7 @@ class SeleniumFlexAPICommands(object):
         raise NotImplementedError("The function call 'getFlexParseInt' is not implemented.")
 
     def get_flex_property(self, element_id, flex_property):
-        raise NotImplementedError("The function call 'getFlexProperty' is not implemented. "
-                                  "Use 'rawFlexProperty' instead.")
+        return self.raw_flex_property(element_id, flex_property)
 
     def get_flex_radio_button(self, element_id):
         return self.call("getFlexRadioButton", element_id, '')
@@ -392,7 +409,7 @@ class SeleniumFlexAPICommands(object):
         return self.call("getFlexStepper", element_id, '')
 
     def get_flex_tab_labels(self, element_id):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'getFlexTabLabels' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("getFlexTabLabels", element_id)
@@ -446,7 +463,7 @@ class SeleniumFlexAPICommands(object):
         return self.call("rawFlexDataGridFieldAllValues", element_id, column_index, "true" if extra_data else "false")
 
     def raw_flex_data_grid_field_values_for_column(self, element_id, column_index):
-        if self.api_version < 28:
+        if self.api_version < 27:
             raise NotImplementedError("The function call 'rawFlexDataGridFieldValuesForColumn' is not implemented. "
                                       "Update to newer version of Selenium Flex API.")
         return self.call("rawFlexDataGridFieldValuesForColumn", element_id, column_index)
