@@ -10,7 +10,9 @@ use_setuptools()
 
 DESCRIPTION = """
 FlexSeleniumLibrary is a web testing library for Robot Framework
-to manipulate Adobe Flex applications.
+to manipulate Adobe Flex applications. Flex applications bootstrapped
+with SeleniumFlexAPI or FlexPilot can be programmatically controlled with
+this library.
 """[1:-1]
 
 setup(name         = 'robotframework-flexseleniumlibrary',
@@ -21,13 +23,12 @@ setup(name         = 'robotframework-flexseleniumlibrary',
       author_email = '<hirsivaja@users.noreply.github.com>',
       url          = 'https://github.com/hirsivaja/FlexSeleniumLibrary',
       license      = 'Apache License 2.0',
-      keywords     = 'robotframework testing testautomation selenium webdriver flex',
+      keywords     = 'robotframework testing testautomation selenium webdriver flex FlexPilot SeleniumFlexAPI',
       platforms    = 'any',
       install_requires = [
-          'selenium >= 2.32.0',
-          'robotframework >= 2.6.0'
+          'robotframework-selenium2library >= 1.7.0'
       ],
-      py_modules=['ez_setup'],
+      py_modules   = ['ez_setup'],
       package_dir  = {'' : 'src'},
       packages     = ['FlexSeleniumLibrary','FlexSeleniumLibrary.keywords'],
       include_package_data = True,
