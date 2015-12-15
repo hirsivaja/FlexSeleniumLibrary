@@ -7,3 +7,6 @@ See https://github.com/hirsivaja/sfapi
 
 Or alternatively you can bootstrap your application with FlexPilot.
 See https://github.com/mde/flex-pilot/wiki
+
+For the list of available keywords see
+http://hirsivaja.github.io/FlexSeleniumLibrary/flex_selenium_library.html

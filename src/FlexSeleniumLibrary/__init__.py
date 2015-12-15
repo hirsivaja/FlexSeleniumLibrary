@@ -16,7 +16,7 @@ class FlexSeleniumLibrary(
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-    ROBOT_LIBRARY_VERSION = '0.1.0'
+    ROBOT_LIBRARY_VERSION = '0.2.0'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self, flash_app, api_version=28, sleep_after_call=0, sleep_after_fail=0.1,
@@ -82,6 +82,24 @@ class FlexSeleniumLibrary(
 
     def open_browser(self, url='', browser='firefox', alias=None, remote_url=False, desired_capabilities=None,
                      ff_profile_dir=None):
+        """Opens a new browser instance to given URL.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
+
+        For more information see Selenium2Library documentation:
+        http://robotframework.org/Selenium2Library/doc/Selenium2Library.html
+
+        Args:
+            url: The URL to open
+            browser: The browser to use
+            alias: an alias to identify the browser instance
+            remote_url: see Selenium2Library documentation
+            desired_capabilities: see Selenium2Library documentation
+            ff_profile_dir: see Selenium2Library documentation
+        """
         super(FlexSeleniumLibrary, self).open_browser(url, browser, alias, remote_url, desired_capabilities,
                                                       ff_profile_dir)
         self.flex_selenium = FlexSeleniumKeywords(self._current_browser(), self.flash_object_id, self.api_version,
@@ -92,9 +110,13 @@ class FlexSeleniumLibrary(
         self.flex_pilot_commands = FlexPilotCommands(self._current_browser(), self.flash_object_id)
 
     def close_browser(self):
+        """Closes the current browser.
+        """
         super(FlexSeleniumLibrary, self).close_browser()
 
     def close_all_browsers(self):
+        """Closes all the browsers
+        """
         super(FlexSeleniumLibrary, self).close_all_browsers()
         self.web_driver = None
         self.flex_selenium = None
@@ -103,4 +125,6 @@ class FlexSeleniumLibrary(
         self.flex_pilot_commands = None
 
     def get_text_selenium(self, locator):
+        """Get text using Selenium
+        """
         return self._get_text(locator)
