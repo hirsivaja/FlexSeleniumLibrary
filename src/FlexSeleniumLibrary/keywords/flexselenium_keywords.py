@@ -21,6 +21,11 @@ class FlexSeleniumKeywords(object):
                                                        sleep_after_fail, number_of_retries, ensure_timeout)
 
     def add_notification(self, message):
+        """Displays a message (in a label) in the bottom left corner to the user
+
+        Args:
+            message: the message to show to user
+        """
         return self.sf_api_commands.do_flex_notify(message)
 
     def click(self, element_id, button_label=''):
@@ -45,55 +50,163 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_alert_response(response)
 
     def click_data_grid_column_header(self, element_id, column_index):
+        """Clicks the header of the given column in a data grid thus sorting its content.
+        Click once to sort in ascending order and twice to sort in descending order
+
+        Args:
+            element_id: the data grid to manipulate
+            column_index: the index of the column to click
+        """
         return self.sf_api_commands.do_flex_data_grid_click_column_header(element_id, column_index)
 
     def click_data_grid_item_by_label(self, element_id, column_index, label):
+        """Clicks a data grid item from the given column by matching its label.
+
+        Args:
+            element_id: the data grid to manipulate
+            column_index: the index of the column to search
+            label: the label to match with
+        """
         return self.sf_api_commands.raw_flex_click_data_grid_item(element_id, column_index, label)
 
     def click_data_grid_ui_component(self, element_id, row_index, column_index, component_number_in_cell=-1):
+        """Click the UI component (Button, CheckBox...) in the given cell.
+
+        Args:
+             element_id: the data grid to manipulate
+             row_index: row of the cell
+             column_index: column of the cell
+             component_number_in_cell: -1 clicks the cell itself, 0 clicks the first UI component,
+             1 the second and so forth
+        """
         return self.sf_api_commands.do_flex_click_data_grid_ui_component(element_id, row_index, column_index,
                                                                          component_number_in_cell)
 
     def click_menu_bar_component(self, element_id, menu_bar_item_index,
                                  menu_item_row_index, menu_item_column_index, component_index_in_cell=0):
+        """Clicks an item in a menu.
+
+        Example:
+            | File | Help |
+            ---------------
+            | Open | Manual |
+            | Save | About  |
+            | Exit |
+
+        Args:
+             element_id: id of the menu bar
+             menu_bar_item_index: to select 'File' menu use 0 and 1 to select 'Help'.
+             menu_item_row_index: to select 'Exit' use 2
+             menu_item_column_index: if the menu has several columns, choose one of them
+             component_index_in_cell: if the specified cell has multiple UI component, select which to click
+        """
         return self.sf_api_commands.raw_flex_click_menu_bar_ui_component(element_id, menu_bar_item_index,
                                                                          menu_item_row_index, menu_item_column_index,
                                                                          component_index_in_cell)
 
     def click_selected_data_grid_item(self, element_id):
+        """Clicks the selected item (row) from the given data grid. Selection should be made beforehand.
+
+        Args:
+             element_id: the data grid with a selected item
+        """
         return self.sf_api_commands.do_flex_click_selected_data_grid_item(element_id)
 
     def create_dropdown_event(self, element_id, open_event=True):
+        """Dispatches a DropdownEvent to element
+
+        Args:
+             element_id: target element
+             open_event: if true, dispatches DropdownEvent.OPEN. Else DropdownEvent.CLOSE
+        """
         return self.sf_api_commands.do_flex_combo_send_event(element_id, "open" if open_event else "close")
 
     def create_mouse_down_event(self, element_id):
+        """Dispatches a MouseEvent.MOUSE_DOWN event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_mouse_down(element_id)
 
     def create_mouse_event(self, element_id, event):
+        """Dispatches a MouseEvent event to element
+
+        Args:
+             element_id: target element
+             event: the mouse event to dispatch. See
+                http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/MouseEvent.html
+        """
         return self.sf_api_commands.do_flex_mouse_event(element_id, event)
 
     def create_mouse_move_event(self, element_id, x, y):
+        """Dispatches a MouseEvent.MOUSE_MOVE event to element
+
+        Args:
+             element_id: target element
+             x: where to move, x-coordinate
+             y: where to move, y-coordinate
+        """
         return self.sf_api_commands.do_flex_mouse_move(element_id, x, y)
 
     def create_mouse_over_event(self, element_id):
+        """Dispatches a MouseEvent.MOUSE_OVER event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_mouse_over(element_id)
 
     def create_mouse_roll_out_event(self, element_id):
+        """Dispatches a MouseEvent.ROLL_OUT event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_mouse_roll_out(element_id)
 
     def create_mouse_roll_over_event(self, element_id):
+        """Dispatches a MouseEvent.ROLL_OVER event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_mouse_roll_over(element_id)
 
     def create_mouse_up_event(self, element_id):
+        """Dispatches a MouseEvent.MOUSE_UP event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_mouse_up(element_id)
 
     def double_click(self, element_id):
+        """Dispatches a MouseEvent.DOUBLE_CLICK event to element
+
+        Args:
+             element_id: target element
+        """
         return self.sf_api_commands.do_flex_double_click(element_id)
 
     def double_click_data_grid_component(self, element_id, row_index, column_index):
+        """Dispatches a MouseEvent.DOUBLE_CLICK event to an element in a data grid cell
+
+        Args:
+             element_id: target data grid
+             row_index: row of the target cell
+             column_index: column of the target cell
+        """
         return self.sf_api_commands.do_flex_double_click_data_grid_ui_component(element_id, row_index, column_index)
 
     def drag_element_to(self, element_id, x, y):
+        """Drag element to specified coordinates
+
+        Args:
+             element_id: element to drag
+             x: destination, x-coordinate
+             y: destination, y-coordinate
+        """
         return self.sf_api_commands.do_flex_drag_to(element_id, x, y)
 
     def enter_date(self, element_id, date_as_text):
@@ -108,6 +221,14 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_date(element_id, date_as_text)
 
     def enter_date_to_data_grid_cell(self, element_id, row_index, column_index, date):
+        """Enters a date to a Date component in a data grid cell
+
+        Args:
+             element_id: data grid id
+             row_index: row of the component
+             column_index: column of the component
+             date: the date to enter
+        """
         return self.sf_api_commands.do_flex_data_grid_date(element_id, row_index, column_index, date)
 
     def enter_text(self, element_id, text, append=False):
@@ -126,12 +247,30 @@ class FlexSeleniumKeywords(object):
             return self.sf_api_commands.do_flex_type(element_id, text)
 
     def ensure_enabled_state(self, element_id, expected_enabled_state):
+        """Wait until the enabled state of the element is expected or timeout occurs.
+
+        Args:
+             element_id: element to check
+             expected_enabled_state: should the element be enabled or disabled
+        """
         self.sf_api_commands.ensure_result(expected_enabled_state, self.is_enabled, element_id)
 
     def ensure_exists(self, element_id, expected_existing_state):
+        """Wait until the existence of the element is expected or timeout occurs.
+
+        Args:
+             element_id: element to check
+             expected_existing_state: should the element exist or not
+        """
         self.sf_api_commands.ensure_result(expected_existing_state, self.exists, element_id)
 
     def ensure_visibility(self, element_id, expected_visibility):
+        """Wait until the visibility of the element is expected or timeout occurs.
+
+        Args:
+             element_id: element to check
+             expected_visibility: should the element be visible or not
+        """
         self.sf_api_commands.ensure_result(expected_visibility, self.is_visible, element_id)
 
     def exists(self, element_id):
@@ -151,6 +290,11 @@ class FlexSeleniumKeywords(object):
         return exists == 'true'
 
     def expand_data_grid_elements(self, element_id):
+        """Expand all items in a data grid. Works if the data grid contains a tree.
+
+        Args:
+             element_id: data grid id
+        """
         return self.sf_api_commands.do_flex_data_grid_expand_all(element_id)
 
     def is_alert_visible(self):
@@ -204,6 +348,15 @@ class FlexSeleniumKeywords(object):
         return checked == 'true'
 
     def is_function_defined(self, function_name):
+        """Check if the function is defined as an external JavaScript callback.
+
+        Args:
+            function_name: the name of the function
+        Returns:
+            existence of the function as boolean
+        Raises:
+            AssertionError: for other values than True and False
+        """
         return self.sf_api_commands.is_function_defined(function_name)
 
     def is_enabled(self, element_id):
@@ -398,9 +551,21 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.get_flex_text(element_id)
 
     def press_enter_on_element(self, element_id):
+        """Simulate pressing 'enter' key on the element
+
+        Args:
+             element_id: target element
+        """
         return self.press_key_on_element(element_id, "13")
 
     def press_key_on_element(self, element_id, key_code):
+        """Dispatches KEY_DOWN and KEY_UP keyboard events to the element.
+
+        Args:
+             element_id: target element
+             key_code: key code to dispatch. See this for the available key codes
+                http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
+        """
         key_down = self.sf_api_commands.do_flex_key_down(element_id, key_code)
         key_up = self.sf_api_commands.do_flex_key_up(element_id, key_code)
         if key_up == "true" and key_down == "true":
@@ -408,6 +573,11 @@ class FlexSeleniumKeywords(object):
         return "{} {}".format(key_down, key_up)
 
     def press_space_on_element(self, element_id):
+        """Simulate pressing 'space bar' key on the element
+
+        Args:
+             element_id: target element
+        """
         return self.press_key_on_element(element_id, "32")
 
     def select(self, element_id, item_to_select):
@@ -454,10 +624,24 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_select_combo_by_label(element_id, item_to_select)
 
     def select_combobox_item_by_label_from_data_grid(self, element_id, row_index, column_index, item_to_select):
+        """Select a value from a combo box inside a data grid
+
+        Args:
+             element_id: data grid id
+             row_index: data grid row
+             column_index: data grid column
+             item_to_select: value of the label in the combo box to select
+        """
         return self.sf_api_commands.do_flex_data_grid_select_combo_by_label(element_id, row_index, column_index,
                                                                             item_to_select)
 
     def select_data_grid_index(self, element_id, index_to_select):
+        """Select the given row from a data grid
+
+        Args:
+             element_id: data grid id
+             index_to_select: index of the row to select
+        """
         return self.sf_api_commands.do_flex_select_data_grid_index(element_id, index_to_select)
 
     def select_index(self, element_id, index_to_select, add_to_selection=False):
@@ -476,6 +660,24 @@ class FlexSeleniumKeywords(object):
             return self.sf_api_commands.do_flex_select_index(element_id, index_to_select)
 
     def select_tree_item(self, element_id, property_name, *search_words):
+        """Select an item from tree that is in a data grid
+
+        Example:
+            Tree
+                |_node:item1
+                |          |_node:item1.1
+                |_node:item2
+                           |_node:item2.1
+                           |_node:item2.2
+        select_tree_item('Tree', 'node', 'item2', 'item2.2');
+
+        results in row 'node:item2.2' to be selected.
+
+        Args:
+             element_id: data grid id
+             property_name: name of the property to match to
+             search_words: list of values for the property
+        """
         return self.sf_api_commands.do_flex_select_tree_item(element_id, property_name, *search_words)
 
     def set_checkbox_value(self, element_id, value):
@@ -503,6 +705,14 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.raw_flex_set_data_grid_cell(element_id, row_index, column_index, value)
 
     def set_data_grid_checkbox_value(self, element_id, row_index, column_index, value):
+        """Set the state of a check box component that is in a data grid cell
+
+        Args:
+             element_id: data grid id
+             row_index: row of the check box cell
+             column_index: column of the check box cell
+             value: check or not
+        """
         return self.sf_api_commands.do_flex_data_grid_checkbox(element_id, row_index, column_index,
                                                                "true" if value else "false")
 
@@ -551,7 +761,19 @@ class FlexSeleniumKeywords(object):
         return self.sf_api_commands.do_flex_stepper(element_id, value)
 
     def wait_for_element_to_exist(self, element_id, timeout):
+        """Wait until element exists or timeout occurs
+
+        Args:
+            element_id: element to exist
+            timeout: number of times to try. Not exact time
+        """
         return self.sf_api_commands.do_flex_wait_for_element(element_id, timeout)
 
     def wait_for_element_to_be_visible(self, element_id, timeout):
+        """Wait until element is visible or timeout occurs
+
+        Args:
+            element_id: element to become visible
+            timeout: number of times to try. Not exact time
+        """
         return self.sf_api_commands.do_flex_wait_for_element_visible(element_id, timeout)
