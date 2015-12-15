@@ -442,64 +442,208 @@ class FlexSeleniumKeywords(object):
         return visibility == 'true'
 
     def get_alert_text(self):
+        """If an alert is shown, gets its text
+
+        Returns:
+            the alert text if visible, error otherwise
+        """
         return self.sf_api_commands.get_flex_alert_text()
 
     def get_api_version(self):
+        """Get the version of the SFAPI. If 'getFlexAPIVersion' function is not defined returns API version 26.
+
+        Returns:
+            version of the SeleniumFlexAPI present in the tested application
+        """
         if self.is_function_defined("getFlexAPIVersion"):
             return self.sf_api_commands.get_flex_api_version().split(".")[1]
         return 26
 
     def get_child_elements(self, element_id, full_path, only_visible_children):
+        """Get all the child elements of the given element
+
+        Args:
+             element_id: element which children to retrieve
+             full_path: return full path of child elements or only its own id
+             only_visible_children: return all or only visible child elements
+        Returns:
+            list of child element ids
+        """
         return self.sf_api_commands.get_flex_children(element_id, "true" if full_path else "false",
                                                       "true" if only_visible_children else "false")
 
     def get_combobox_selected_item(self, element_id):
+        """Get all the selected items from a combobox
+
+        Args:
+             element_id: combobox id
+        Returns:
+            list of selected items in a combobox
+        """
         return self.sf_api_commands.get_flex_selection(element_id)
 
     def get_combobox_values(self, element_id):
+        """Get all the possible values from a combobox
+
+        Args:
+             element_id: combobox id
+        Returns:
+            list of all the combobox values
+        """
         return self.sf_api_commands.get_flex_combo_values(element_id).split("#;#")
 
     def get_component_info(self, element_id):
+        """Get position and size of the component. X, Y, width, height.
+
+        Args:
+             element_id: component id
+        Returns:
+            component x-coordinate, y-coordinate, width and height
+        """
         return self.sf_api_commands.get_flex_component_info(element_id)
 
     def get_data_grid_cell_label(self, element_id, row_index, column_index):
+        """Get the label of a data grid cell
+
+        Args:
+             element_id: data grid id
+             row_index: row of the cell
+             column_index: column of the cell
+        Returns:
+            label of the cell
+        """
         return self.sf_api_commands.raw_flex_data_grid_cell_text(element_id, row_index, column_index)
 
     def get_data_grid_cell_value(self, element_id, row_index, column_index):
+        """Get the value of a data grid cell
+
+        Args:
+             element_id: data grid id
+             row_index: row of the cell
+             column_index: column of the cell
+        Returns:
+            value of the cell
+        """
         return self.sf_api_commands.raw_flex_data_grid_cell(element_id, row_index, column_index)
 
     def get_data_grid_component_label(self, element_id, row_index, column_index, component_index_in_cell=0):
+        """Get the label of a UI component in a data grid cell
+
+        Args:
+             element_id: data grid id
+             row_index: row of the cell
+             column_index: column of the cell
+             component_index_in_cell: which component from the cell to choose if more than one is present
+        Returns:
+            label of the UI component
+        """
         return self.sf_api_commands.raw_flex_data_grid_ui_component_label(element_id, row_index, column_index,
                                                                           component_index_in_cell)
 
     def get_data_grid_field_count(self, element_id, only_visible):
+        """Get the number of fields (columns) in a data grid
+
+        Args:
+             element_id: data grid id
+             only_visible: count only displayed fields
+        Returns:
+            number of fields
+        """
         return self.sf_api_commands.get_flex_data_grid_col_count(element_id, only_visible)
 
     def get_data_grid_field_data_fields(self, element_id, only_visible):
+        """Get the names of data fields (columns) in a data grid
+
+        Args:
+             element_id: data grid id
+             only_visible: only displayed fields
+        Returns:
+            names of the data fields
+        """
         return self.sf_api_commands.get_flex_data_grid_col_data_fields(element_id, only_visible).split("|")
 
     def get_data_grid_field_label_by_row_index(self, element_id, field, row):
+        """Get the label from the given row in the field
+
+        Args:
+             element_id: data grid id
+             field: name of the field to search
+             row: the row for element
+        Returns:
+            label of the cell
+        """
         return self.sf_api_commands.raw_flex_data_grid_field_label_for_grid_row(element_id, field, row)
 
     def get_data_grid_field_value_by_row_index(self, element_id, field, row_index):
+        """Get the value from the given row in the field
+
+        Args:
+             element_id: data grid id
+             field: name of the field to search
+             row_index: the row for element
+        Returns:
+            value of the cell
+        """
         return self.sf_api_commands.raw_flex_data_grid_field_value_for_grid_row(element_id, field, row_index)
 
     def get_data_grid_field_values(self, element_id, field, extra_data=None):
+        """Get all the values from one field (column)
+
+        Args:
+             element_id: data grid id
+             field: name of the field
+             extra_data: include extra data
+        Returns:
+            list of all the values for the field
+        """
         if extra_data is not None:
             return self.sf_api_commands.raw_flex_data_grid_field_all_values(element_id, field, extra_data)
         else:
             return self.sf_api_commands.raw_flex_data_grid_field_values_for_column(element_id, field).split("#;#")
 
     def get_data_grid_row_count(self, element_id):
+        """Get the number of rows in a data grid
+
+        Args:
+             element_id: data grid id
+        Returns:
+            number of rows
+        """
         return self.sf_api_commands.get_flex_data_grid_row_count(element_id)
 
     def get_data_grid_row_index_by_field_label(self, element_id, field, label):
+        """Get the row number for the label by searching a field
+
+        Args:
+             element_id: data grid id
+             field: name of the field to search
+             label: the label to match
+        Returns:
+            row number where the label was found, -1 if not found
+        """
         return self.sf_api_commands.raw_flex_data_grid_row_index_for_field_label(element_id, field, label)
 
     def get_data_grid_row_index_by_field_value(self, element_id, field, value):
+        """Get the row number for the value by searching a field
+
+        Args:
+             element_id: data grid id
+             field: name of the field to search
+             value: the value to match
+        Returns:
+            row number where the value was found, -1 if not found
+        """
         return self.sf_api_commands.raw_flex_data_grid_row_index_for_field_value(element_id, field, value)
 
     def get_data_grid_values(self, element_id, only_visible):
+        """Get all the values in a data grid
+
+        Args:
+             element_id: data grid id
+             only_visible: should only values from visible columns be returned
+        Returns:
+            all the values in the data grid
+        """
         value_rows = self.sf_api_commands.get_flex_data_grid_values(element_id,
                                                                     only_visible).split("##ITEM####ROW####ITEM##")
         result = []
@@ -508,18 +652,54 @@ class FlexSeleniumKeywords(object):
         return result
 
     def get_date(self, element_id):
+        """Get the date from a Date component
+
+        Args:
+             element_id: date component id
+        Returns:
+            date as a string
+        """
         return self.sf_api_commands.get_flex_date(element_id)
 
     def get_error_string(self, element_id):
+        """Get the value of the elements 'errorString' property
+
+        Args:
+             element_id: component id
+        Returns:
+            the value of the errorString property
+        """
         return self.sf_api_commands.get_flex_error_string(element_id)
 
     def get_global_position(self, element_id):
+        """Get the global position of the element
+
+        Args:
+             element_id: component id
+        Returns:
+            x- and y-coordinates
+        """
         return self.sf_api_commands.raw_flex_global_position(element_id)
 
     def get_number_of_selected_items(self, element_id):
+        """Get the number of selected items from the element that supports selection
+
+        Args:
+             element_id: component that supports selection
+        Returns:
+            number of selected items
+        """
         return self.sf_api_commands.get_flex_num_selected_items(element_id)
 
     def get_path_for_locator(self, element_id, allow_invisible=True):
+        """Get the full path for a locator
+
+        Args:
+             element_id: locator for an element
+             allow_invisible: are invisible elements allowed
+        Returns:
+            path of the element found by the locator
+        """
         name, parent, visible = self.sf_api_commands.raw_flex_properties(
             element_id, "name", "parent", "visible").split(',')
         if "Error: The element '{}' was not found in the application".format(element_id) in name:
@@ -530,24 +710,77 @@ class FlexSeleniumKeywords(object):
         return path
 
     def get_properties(self, element_id, *flex_properties):
+        """Get the listed properties
+
+        Args:
+             element_id: component id
+             flex_properties: list of properties to get
+        Returns:
+            list of property values
+        """
         return self.sf_api_commands.raw_flex_properties(element_id, *flex_properties)
 
     def get_property(self, element_id, flex_property):
+        """Get the value of the given property
+
+        Args:
+             element_id: component id
+             flex_property: property to get
+        Returns:
+            value of the property
+        """
         return self.sf_api_commands.raw_flex_property(element_id, flex_property)
 
     def get_selection_index(self, element_id):
+        """Get the index of the selected item
+
+        Args:
+             element_id: component id
+        Returns:
+            index of the selected item
+        """
         return self.sf_api_commands.get_flex_selection_index(element_id)
 
     def get_selected_item_at_index(self, element_id, index):
+        """Get the item that is found in the given position in the list of selected items
+
+        Args:
+             element_id: component id
+             index: which item to return from the list of selected items. For example, if 5 items are selected, index 4
+                returns the fifth selected item (zero-based indexing)
+        Returns:
+            item at given index
+        """
         return self.sf_api_commands.get_flex_selected_item_at_index(element_id, index)
 
     def get_stepper_value(self, element_id):
+        """Get the value of the stepper component
+
+        Args:
+             element_id: stepper id
+        Returns:
+            value of the stepper
+        """
         return self.sf_api_commands.get_flex_stepper(element_id)
 
     def get_tab_labels(self, element_id):
+        """Get the labels of tabs in a tab navigator
+
+        Args:
+             element_id: tab navigator id
+        Returns:
+            list of tab labels in the tab navigator
+        """
         return self.sf_api_commands.get_flex_tab_labels(element_id)
 
     def get_text(self, element_id):
+        """Get the text or label from an element
+
+        Args:
+             element_id: component id
+        Returns:
+            the text or label of the component depending on the component type
+        """
         return self.sf_api_commands.get_flex_text(element_id)
 
     def press_enter_on_element(self, element_id):
