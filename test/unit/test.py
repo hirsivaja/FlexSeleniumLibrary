@@ -203,56 +203,6 @@ class TestCases(unittest.TestCase):
         assert self.flex_selenium.exists("clickButton")
         assert not self.flex_selenium.exists("notButton")
 
-    def test_is_alert_visible(self):
-        # Tested by: self.test_click_alert()
-        pass
-
-    def test_is_checkbox_checked(self):
-        # Tested by: self.test_select_checkbox()
-        pass
-
-    def test_is_checkbox_in_data_grid_checked(self):
-        self.flex_selenium.select_index("buttonBar", data_grid_view)
-        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "0", "2")
-        assert not self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "1", "2")
-        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "2", "2")
-
-    def test_is_enabled(self):
-        self.flex_selenium.select_index("buttonBar", buttons_view)
-        assert self.flex_selenium.is_enabled("clickButton")
-        assert not self.flex_selenium.is_enabled("disabledButton")
-
-    def test_is_label_in_combo_data(self):
-        self.flex_selenium.select_index("buttonBar", combo_box_view)
-        assert self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, true")
-        assert not self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, false")
-
-    def test_is_radiobutton_checked(self):
-        self.flex_selenium.select_index("buttonBar", radio_buttons_view)
-        self.flex_selenium.set_radiobutton_value("radioButton3")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
-        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
-        self.flex_selenium.set_radiobutton_value("radioButton2")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
-        assert self.flex_selenium.is_radiobutton_checked("radioButton2")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton3")
-        self.flex_selenium.set_radiobutton_value("radioButton3")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
-        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
-        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
-
-    def test_is_text_present(self):
-        self.flex_selenium.select_index("buttonBar", buttons_view)
-        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 0")
-        assert not self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 1")
-        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks")
-
-    def test_is_visible(self):
-        self.flex_selenium.select_index("buttonBar", buttons_view)
-        assert self.flex_selenium.is_visible("clickButton")
-        assert not self.flex_selenium.is_visible("invisibleButton")
-
     def test_get_alert_text(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
         self.flex_selenium.click("alertButton")
@@ -398,6 +348,64 @@ class TestCases(unittest.TestCase):
         assert "Number of clicks: 0" == self.flex_selenium.get_text("buttonClicks")
         assert "Click" == self.flex_selenium.get_text("clickButton")
 
+    def test_is_alert_visible(self):
+        # Tested by: self.test_click_alert()
+        pass
+
+    def test_is_checkbox_checked(self):
+        self.flex_selenium.select_index("buttonBar", check_box_view)
+        assert self.flex_selenium.is_checkbox_checked("checkBox")
+        self.flex_selenium.set_checkbox_value("checkBox", False)
+        assert not self.flex_selenium.is_checkbox_checked("checkBox")
+        self.flex_selenium.set_checkbox_value("checkBox", True)
+        assert self.flex_selenium.is_checkbox_checked("checkBox")
+
+    def test_is_checkbox_in_data_grid_checked(self):
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "0", "2")
+        assert not self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "1", "2")
+        assert self.flex_selenium.is_checkbox_in_data_grid_checked("dataGrid", "2", "2")
+
+    def test_is_enabled(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_enabled("clickButton")
+        assert not self.flex_selenium.is_enabled("disabledButton")
+
+    def test_is_function_defined(self):
+        assert self.flex_selenium.is_function_defined("getFlexAPIVersion")
+        assert not self.flex_selenium.is_function_defined("getFlexSizeOfTheMoon")
+
+    def test_is_label_in_combo_data(self):
+        self.flex_selenium.select_index("buttonBar", combo_box_view)
+        assert self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, true")
+        assert not self.flex_selenium.is_label_in_combo_data("comboBox", "Element = Element3, 3, false")
+
+    def test_is_radiobutton_checked(self):
+        self.flex_selenium.select_index("buttonBar", radio_buttons_view)
+        self.flex_selenium.set_radiobutton_value("radioButton3")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
+        self.flex_selenium.set_radiobutton_value("radioButton2")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton3")
+        self.flex_selenium.set_radiobutton_value("radioButton3")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton1")
+        assert not self.flex_selenium.is_radiobutton_checked("radioButton2")
+        assert self.flex_selenium.is_radiobutton_checked("radioButton3")
+
+    def test_is_text_present(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 0")
+        assert not self.flex_selenium.is_text_present("buttonClicks", "Number of clicks: 1")
+        assert self.flex_selenium.is_text_present("buttonClicks", "Number of clicks")
+
+    def test_is_visible(self):
+        self.flex_selenium.select_index("buttonBar", buttons_view)
+        assert self.flex_selenium.is_visible("clickButton")
+        assert not self.flex_selenium.is_visible("invisibleButton")
+
     def test_press_key_on_element(self):
         self.flex_selenium.select_index("buttonBar", mouse_view)
         self.flex_selenium.press_enter_on_element("keyboardEventCatcher")
@@ -423,14 +431,6 @@ class TestCases(unittest.TestCase):
         self.flex_selenium.select_by_matching_on_field("dataGrid", "attribute1", "Element2", True)
         assert "Element = Element3, 3, true" == self.flex_selenium.get_selected_item_at_index("dataGrid", "0")
         assert "Element = Element2, 2, false" == self.flex_selenium.get_selected_item_at_index("dataGrid", "1")
-
-    def test_select_checkbox(self):
-        self.flex_selenium.select_index("buttonBar", check_box_view)
-        assert self.flex_selenium.is_checkbox_checked("checkBox")
-        self.flex_selenium.set_checkbox_value("checkBox", False)
-        assert not self.flex_selenium.is_checkbox_checked("checkBox")
-        self.flex_selenium.set_checkbox_value("checkBox", True)
-        assert self.flex_selenium.is_checkbox_checked("checkBox")
 
     def test_select_combobox_item_by_label(self):
         self.flex_selenium.select_index("buttonBar", combo_box_view)

@@ -1,4 +1,5 @@
 import time
+from robot.api import logger
 
 
 class FlexPilotCommands(object):
@@ -16,6 +17,7 @@ class FlexPilotCommands(object):
                 params += str(param) + ","
             params = "{" + params[:-1] + "}"
         script = "return document.getElementById('{}').{}({});".format(self.flash_object_id, function_name, params)
+        logger.debug("JavaScript to execute: '{}'".format(script))
         result = self.web_driver.execute_script(script)
         return result
 

@@ -1,5 +1,6 @@
 import time
 from selenium.common.exceptions import WebDriverException
+from robot.api import logger
 
 
 class SeleniumFlexAPICommands(object):
@@ -36,6 +37,7 @@ class SeleniumFlexAPICommands(object):
             params += "'" + str(param) + "',"
         script = "return document.{}.{}({});".format(self.flash_object_id, function_name, params[:-1])
         tries = self.number_of_retries
+        logger.debug("JavaScript to execute: '{}'".format(script))
         while True:
             try:
                 result = self.web_driver.execute_script(script)
