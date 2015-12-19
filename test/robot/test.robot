@@ -193,6 +193,12 @@ Enter Date
     Should Be Equal    ${date}    Selected date: 20/11/2011
 
 Enter Date To Data Grid Cell
+    Select Index    ${button_bar}    ${data_grid_view}
+    ${value}=    Get Data Grid Cell Value    dataGrid0    1    1
+    Should Be Equal    ${value}    Fri Feb 2 00:00:00 GMT+0200 2001
+    Enter Date To Data Grid Cell    dataGrid0    1    1    20.11.2011
+    ${value}=    Get Data Grid Cell Value    dataGrid0    1    1
+    Should Be Equal    ${value}    Sun Nov 20 00:00:00 GMT+0200 2011
 
 Enter Text
     Click    buttonBar    Buttons view
@@ -577,6 +583,11 @@ Select Combobox Item By Label
     Should Be Equal    ${selected_item}    Element = Element3, 3, true
 
 Select Combobox Item By Label From Data Grid
+    Select Index    ${button_bar}    ${data_grid_view}
+    Select Combobox Item By Label From Data Grid    dataGrid0    0    2    Option3
+    ${alert_text}=    Get Alert Text
+    Should Be Equal    ${alert_text}    Data grid combo value changed!
+    Click Alert    OK
 
 Select Data Grid Index
     Select Index    ${button_bar}    ${data_grid_view}

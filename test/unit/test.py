@@ -243,7 +243,7 @@ class TestCases(unittest.TestCase):
 
     def test_get_data_grid_component_label(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
-        print self.flex_selenium.get_data_grid_component_label("dataGrid", "1", "2")
+        assert "3" == self.flex_selenium.get_data_grid_component_label("dataGrid", "1", "2")
 
     def test_get_data_grid_field_count(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)
