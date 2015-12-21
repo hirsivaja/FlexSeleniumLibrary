@@ -441,7 +441,12 @@ class TestCases(unittest.TestCase):
         assert "Element = Element3, 3, true" == self.flex_selenium.get_combobox_selected_item("comboBox")
 
     def test_select_combobox_item_by_label_from_data_grid(self):
-        pass
+        self.flex_selenium.select_index("buttonBar", data_grid_view)
+        self.flex_selenium.select_data_grid_index("dataGrid0", "0")
+        assert self.flex_selenium.get_text("selectedGridItem0") == 'Selected item: '
+        self.flex_selenium.select_combobox_item_by_label_from_data_grid("dataGrid0", "0", "2", "Option3")
+        assert self.flex_selenium.get_text("selectedGridItem0") == 'Selected item: Element1, ' \
+                                                                   'Sat Jan 1 00:00:00 GMT+0200 2000, true'
 
     def test_select_data_grid_index(self):
         self.flex_selenium.select_index("buttonBar", data_grid_view)

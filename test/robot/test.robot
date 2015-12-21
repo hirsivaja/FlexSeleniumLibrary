@@ -584,10 +584,12 @@ Select Combobox Item By Label
 
 Select Combobox Item By Label From Data Grid
     Select Index    ${button_bar}    ${data_grid_view}
+    Select Data Grid Index    dataGrid0    0
+    ${text}=    Get Text    selectedGridItem0
+    Should Be Equal    '${text}'    'Selected item: '
     Select Combobox Item By Label From Data Grid    dataGrid0    0    2    Option3
-    ${alert_text}=    Get Alert Text
-    Should Be Equal    ${alert_text}    Data grid combo value changed!
-    Click Alert    OK
+    ${text}=    Get Text    selectedGridItem0
+    Should Be Equal    ${text}    Selected item: Element1, Sat Jan 1 00:00:00 GMT+0200 2000, true
 
 Select Data Grid Index
     Select Index    ${button_bar}    ${data_grid_view}
