@@ -425,11 +425,12 @@ class FlexSeleniumKeywords(object):
                                  .format(text, element_id, present))
         return present == 'true'
 
-    def is_visible(self, element_id):
+    def is_visible(self, element_id, fail_if_not_found=True):
         """Check if the element is visible.
 
         Args:
             element_id: the value of the elements id property.
+            fail_if_not_found: raise AssertionError if element is not found
         Returns:
             is the element visible as boolean
         Raises:
@@ -437,6 +438,9 @@ class FlexSeleniumKeywords(object):
         """
         visibility = self.sf_api_commands.get_flex_visible(element_id)
         if visibility != 'true' and visibility != 'false':
+            if visibility == "Error: The element '{}' was not found in the application".format(element_id) \
+                    and not fail_if_not_found:
+                return False
             raise AssertionError("Visibility of '{}' returned an unexpected value: {}"
                                  .format(element_id, visibility))
         return visibility == 'true'
