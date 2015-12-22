@@ -17,6 +17,9 @@ class SeleniumFlexAPICommands(object):
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
 
+    def set_api_version(self, api_version):
+        self.api_version = api_version
+
     def set_sleep_after_call(self, sleep_after_call):
         self.sleep_after_call = sleep_after_call
 
@@ -26,8 +29,8 @@ class SeleniumFlexAPICommands(object):
     def set_number_of_retries(self, number_of_retries):
         self.number_of_retries = number_of_retries
 
-    def set_api_version(self, api_version):
-        self.api_version = api_version
+    def set_ensure_timeout(self, ensure_timeout):
+        self.ensure_timeout = ensure_timeout
 
     def call(self, function_name, *function_parameters):
         if self.web_driver is None:

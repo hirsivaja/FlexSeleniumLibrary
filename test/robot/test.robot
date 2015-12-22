@@ -171,6 +171,14 @@ Double Click Data Grid Component
     Should Be Equal    ${alert_text}    Mouse event: doubleClick
 
 Drag Element To
+    Select Index    ${button_bar}    ${mouse_view}
+    ${position}=    Get global position    dataGrid2
+    @{coordinates}=    Split String    ${position}    ,
+    ${row_count}=    Get Data Grid Row Count    dataGrid2
+    Should be equal    ${row_count}    0
+    Drag element to    text=Element1    @{coordinates}
+    ${row_count}=    Get Data Grid Row Count    dataGrid2
+    Should be equal    ${row_count}    1
 
 Ensure Enabled State
     Select Index    ${button_bar}    ${buttons_view}
