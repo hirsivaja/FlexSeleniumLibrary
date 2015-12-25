@@ -21,6 +21,9 @@ class FlexPilotCommands(object):
         result = self.web_driver.execute_script(script)
         return result
 
+    def set_web_driver(self, web_driver):
+        self.web_driver = web_driver
+
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
 

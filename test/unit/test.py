@@ -31,21 +31,20 @@ class TestCases(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.flex_selenium_library = FlexSeleniumLibrary(application_name, api_version, sleep_after_call,
-                                                        sleep_after_fail, number_of_retries, ensure_timeout)
-        cls.flex_selenium_library.open_browser("")
-        cls.flex_selenium_library.maximize_browser_window()
-        cls.flex_selenium = cls.flex_selenium_library.flex_selenium
+        cls.flex_selenium = FlexSeleniumLibrary(application_name, api_version, sleep_after_call, sleep_after_fail,
+                                                number_of_retries, ensure_timeout)
+        cls.flex_selenium.open_browser("")
+        cls.flex_selenium.maximize_browser_window()
 
     @classmethod
     def tearDownClass(cls):
-        cls.flex_selenium_library.close_browser()
+        cls.flex_selenium.close_browser()
 
     def setUp(self):
-        self.flex_selenium_library.go_to(application_url)
+        self.flex_selenium.go_to(application_url)
         # Wait until "buttonBar" is found
         self.flex_selenium.ensure_enabled_state("buttonBar", True)
-        self.flex_selenium.sf_api_commands.set_api_version(self.flex_selenium.get_api_version())
+        self.flex_selenium.set_api_version(self.flex_selenium.get_api_version())
 
     def test_locators(self):
         self.flex_selenium.select_index("buttonBar", buttons_view)
@@ -66,7 +65,7 @@ class TestCases(unittest.TestCase):
         file_path = 'screenshot.jpg'
         if os.path.isfile(file_path):
             os.remove(file_path)
-        self.flex_selenium_library.capture_page_screenshot(file_path)
+        self.flex_selenium.capture_page_screenshot(file_path)
         assert os.path.isfile(file_path)
         os.remove(file_path)
 
@@ -514,9 +513,9 @@ class TestCases(unittest.TestCase):
         assert "30" == self.flex_selenium.get_stepper_value("stepper")
 
     def test_wait_for_element_to_exist(self):
-        self.flex_selenium_library.go_to(application_url)
+        self.flex_selenium.go_to(application_url)
         self.flex_selenium.wait_for_element_to_exist("buttonBar", 10)
 
     def test_wait_for_element_to_be_visible(self):
-        self.flex_selenium_library.go_to(application_url)
+        self.flex_selenium.go_to(application_url)
         self.flex_selenium.wait_for_element_to_be_visible("buttonBar", 10)

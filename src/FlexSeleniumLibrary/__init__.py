@@ -16,7 +16,7 @@ class FlexSeleniumLibrary(
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-    ROBOT_LIBRARY_VERSION = '0.3.0'
+    ROBOT_LIBRARY_VERSION = '0.3.1'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self,
@@ -40,15 +40,9 @@ class FlexSeleniumLibrary(
         Selenium2Library.__init__(self, selenium_timeout, selenium_implicit_wait, selenium_run_on_failure,
                                   selenium_screenshot_root_directory)
 
-        self.flash_object_id = flash_app
-        self.api_version = int(api_version)
-        self.sleep_after_call = float(sleep_after_call)
-        self.sleep_after_fail = float(sleep_after_fail)
-        self.number_of_retries = int(number_of_retries)
-        self.ensure_timeout = float(ensure_timeout)
-        self.web_driver = None
-        self.flex_selenium = None
-        self.flex_pilot = None
+        FlexSeleniumKeywords.__init__(self, None, flash_app, int(api_version), float(sleep_after_call),
+                                      float(sleep_after_fail), int(number_of_retries), float(ensure_timeout))
+        FlexPilotKeywords.__init__(self, None, flash_app)
 
     def set_flash_app(self, flash_app):
         """Change the flash application name under test. The application name is used to create the JavaScript
@@ -57,8 +51,8 @@ class FlexSeleniumLibrary(
         Args:
             flash_app: the value for the new application. The name of the application.
         """
-        self.flex_selenium.sf_api_commands.set_flash_app(flash_app)
-        self.flex_pilot.flex_pilot_commands.set_flash_app(flash_app)
+        self.sf_api_commands.set_flash_app(flash_app)
+        self.flex_pilot_commands.set_flash_app(flash_app)
 
     def set_api_version(self, api_version):
         """Change the expected version of SFAPI used in the application under test.
@@ -69,7 +63,7 @@ class FlexSeleniumLibrary(
         Args:
             api_version: The expected API version.
         """
-        self.flex_selenium.sf_api_commands.set_api_version(int(api_version))
+        self.sf_api_commands.set_api_version(int(api_version))
 
     def set_sleep_after_call(self, sleep_after_call):
         """Change the delay after each command issued to the flash application.
@@ -77,7 +71,7 @@ class FlexSeleniumLibrary(
         Args:
             sleep_after_call: the value for the delay
         """
-        self.flex_selenium.sf_api_commands.set_sleep_after_call(float(sleep_after_call))
+        self.sf_api_commands.set_sleep_after_call(float(sleep_after_call))
 
     def set_sleep_after_fail(self, sleep_after_fail):
         """Change the delay after each failed command attempt to the flash application.
@@ -85,7 +79,7 @@ class FlexSeleniumLibrary(
         Args:
             sleep_after_fail: the value for the delay
         """
-        self.flex_selenium.sf_api_commands.set_sleep_after_fail(float(sleep_after_fail))
+        self.sf_api_commands.set_sleep_after_fail(float(sleep_after_fail))
 
     def set_number_of_retries(self, number_of_retries):
         """Change the number of retries to execute a command with the flash application.
@@ -95,7 +89,7 @@ class FlexSeleniumLibrary(
         Args:
             number_of_retries: the number of retries before giving up
         """
-        self.flex_selenium.sf_api_commands.set_number_of_retries(int(number_of_retries))
+        self.sf_api_commands.set_number_of_retries(int(number_of_retries))
 
     def set_ensure_timeout(self, ensure_timeout):
         """Change how long to wait for ensure commands to succeed before giving up
@@ -103,7 +97,7 @@ class FlexSeleniumLibrary(
         Args:
              ensure_timeout: Maximum time in seconds to wait for the expected value
         """
-        self.flex_selenium.sf_api_commands.set_ensure_timeout(float(ensure_timeout))
+        self.sf_api_commands.set_ensure_timeout(float(ensure_timeout))
 
     def open_browser(self, url='', browser='firefox', alias=None, remote_url=False, desired_capabilities=None,
                      ff_profile_dir=None):
@@ -127,23 +121,22 @@ class FlexSeleniumLibrary(
         """
         super(FlexSeleniumLibrary, self).open_browser(url, browser, alias, remote_url, desired_capabilities,
                                                       ff_profile_dir)
-        self.flex_selenium = FlexSeleniumKeywords(self._current_browser(), self.flash_object_id, self.api_version,
-                                                  self.sleep_after_call, self.sleep_after_fail, self.number_of_retries,
-                                                  self.ensure_timeout)
-        self.flex_pilot = FlexPilotKeywords(self._current_browser(), self.flash_object_id)
+        self.sf_api_commands.set_web_driver(self._current_browser())
+        self.flex_pilot_commands.set_web_driver(self._current_browser())
 
     def close_browser(self):
         """Closes the current browser.
         """
         super(FlexSeleniumLibrary, self).close_browser()
+        self.sf_api_commands.set_web_driver(None)
+        self.flex_pilot_commands.set_web_driver(None)
 
     def close_all_browsers(self):
         """Closes all the browsers
         """
         super(FlexSeleniumLibrary, self).close_all_browsers()
-        self.web_driver = None
-        self.flex_selenium = None
-        self.flex_pilot = None
+        self.sf_api_commands.set_web_driver(None)
+        self.flex_pilot_commands.set_web_driver(None)
 
     def get_text_selenium(self, locator):
         """Get text using Selenium

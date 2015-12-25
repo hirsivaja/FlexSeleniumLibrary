@@ -14,6 +14,9 @@ class SeleniumFlexAPICommands(object):
         self.number_of_retries = number_of_retries
         self.ensure_timeout = ensure_timeout
 
+    def set_web_driver(self, web_driver):
+        self.web_driver = web_driver
+
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
 
