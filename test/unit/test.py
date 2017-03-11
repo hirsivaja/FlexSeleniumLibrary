@@ -33,7 +33,7 @@ class TestCases(unittest.TestCase):
     def setUpClass(cls):
         cls.flex_selenium = FlexSeleniumLibrary(application_name, api_version, sleep_after_call, sleep_after_fail,
                                                 number_of_retries, ensure_timeout)
-        cls.flex_selenium.open_browser("")
+        cls.flex_selenium.open_browser("about:blank")
         cls.flex_selenium.maximize_browser_window()
 
     @classmethod
