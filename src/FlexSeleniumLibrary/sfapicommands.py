@@ -76,6 +76,8 @@ class SeleniumFlexAPICommands(object):
             return False
         if "{}()".format(function_name) in result:
             return True
+        if isinstance(result, (dict, list)) and len(result) == 0:  # firefox/chrome return empty dict, IE return
+            return True                                            # empty list via latest webdriver 20170312.
         raise AssertionError("Unknown result for function existence: {}".format(result))
 
     def do_flex_add_select_index(self, element_id, index):
