@@ -2,21 +2,23 @@ from keywords.flexselenium_keywords import FlexSeleniumKeywords
 from keywords.flexpilot_keywords import FlexPilotKeywords
 from sfapicommands import SeleniumFlexAPICommands
 from flexpilotcommands import FlexPilotCommands
-from Selenium2Library import Selenium2Library
+from SeleniumLibrary import SeleniumLibrary
+from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.keywords import *
 
 
 class FlexSeleniumLibrary(
             FlexSeleniumKeywords,
             FlexPilotKeywords,
-            Selenium2Library
+            SeleniumLibrary
         ):
     """
-    Test library for Adobe/Apache Flex. Imports Selenium2Library keywords to manipulate rest of the web pages.
+    Test library for Adobe/Apache Flex. Imports SeleniumLibrary keywords to manipulate rest of the web pages.
 
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-    ROBOT_LIBRARY_VERSION = '0.3.1'
+    ROBOT_LIBRARY_VERSION = '0.3.2'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self,
@@ -32,17 +34,17 @@ class FlexSeleniumLibrary(
             sleep_after_fail: wait time after each fail before trying again
             number_of_retries: number of times to retry the command
             ensure_timeout: how long to wait for ensure commands to succeed before giving up
-            selenium_timeout: see Selenium2Library documentation
-            selenium_implicit_wait: see Selenium2Library documentation
-            selenium_run_on_failure: see Selenium2Library documentation
-            selenium_screenshot_root_directory: see Selenium2Library documentation
+            selenium_timeout: see SeleniumLibrary documentation
+            selenium_implicit_wait: see SeleniumLibrary documentation
+            selenium_run_on_failure: see SeleniumLibrary documentation
+            selenium_screenshot_root_directory: see SeleniumLibrary documentation
         """
-        Selenium2Library.__init__(self, selenium_timeout, selenium_implicit_wait, selenium_run_on_failure,
-                                  selenium_screenshot_root_directory)
-
+        SeleniumLibrary.__init__(self, selenium_timeout, selenium_implicit_wait, selenium_run_on_failure,
+                                 selenium_screenshot_root_directory)
         FlexSeleniumKeywords.__init__(self, None, flash_app, int(api_version), float(sleep_after_call),
                                       float(sleep_after_fail), int(number_of_retries), float(ensure_timeout))
         FlexPilotKeywords.__init__(self, None, flash_app)
+        self.add_library_components([OverwrittenKeywords(self, self.sf_api_commands, self.flex_pilot_commands)])
 
     def set_flash_app(self, flash_app):
         """Change the flash application name under test. The application name is used to create the JavaScript
@@ -99,6 +101,18 @@ class FlexSeleniumLibrary(
         """
         self.sf_api_commands.set_ensure_timeout(float(ensure_timeout))
 
+
+class OverwrittenKeywords(LibraryComponent):
+    """
+    Some of the SeleniumLibrary keywords need to be overwritten so that they work with Flex
+    """
+
+    def __init__(self, ctx, sf_api_commands, flex_pilot_commands):
+        LibraryComponent.__init__(self, ctx)
+        self.sf_api_commands = sf_api_commands
+        self.flex_pilot_commands = flex_pilot_commands
+
+    @keyword
     def open_browser(self, url='', browser='firefox', alias=None, remote_url=False, desired_capabilities=None,
                      ff_profile_dir=None):
         """Opens a new browser instance to given URL.
@@ -108,37 +122,43 @@ class FlexSeleniumLibrary(
         `Close All Browsers` keyword is used. See `Switch Browser` for
         example.
 
-        For more information see Selenium2Library documentation:
-        http://robotframework.org/Selenium2Library/doc/Selenium2Library.html
+        For more information see SeleniumLibrary documentation:
+        http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
 
         Args:
             url: The URL to open
             browser: The browser to use
             alias: an alias to identify the browser instance
-            remote_url: see Selenium2Library documentation
-            desired_capabilities: see Selenium2Library documentation
-            ff_profile_dir: see Selenium2Library documentation
+            remote_url: see SeleniumLibrary documentation
+            desired_capabilities: see SeleniumLibrary documentation
+            ff_profile_dir: see SeleniumLibrary documentation
         """
-        super(FlexSeleniumLibrary, self).open_browser(url, browser, alias, remote_url, desired_capabilities,
-                                                      ff_profile_dir)
-        self.sf_api_commands.set_web_driver(self._current_browser())
-        self.flex_pilot_commands.set_web_driver(self._current_browser())
+        browser_management = BrowserManagementKeywords(self.ctx)
+        browser_management.open_browser(url, browser, alias, remote_url, desired_capabilities, ff_profile_dir)
+        self.sf_api_commands.set_web_driver(self.driver)
+        self.flex_pilot_commands.set_web_driver(self.driver)
 
+    @keyword
     def close_browser(self):
         """Closes the current browser.
         """
-        super(FlexSeleniumLibrary, self).close_browser()
+        browser_management = BrowserManagementKeywords(self.ctx)
+        browser_management.close_browser()
         self.sf_api_commands.set_web_driver(None)
         self.flex_pilot_commands.set_web_driver(None)
 
+    @keyword
     def close_all_browsers(self):
         """Closes all the browsers
         """
-        super(FlexSeleniumLibrary, self).close_all_browsers()
+        browser_management = BrowserManagementKeywords(self.ctx)
+        browser_management.close_all_browsers()
         self.sf_api_commands.set_web_driver(None)
         self.flex_pilot_commands.set_web_driver(None)
 
+    @keyword
     def get_text_selenium(self, locator):
         """Get text using Selenium
         """
-        return self._get_text(locator)
+        element_keywords = ElementKeywords(self.ctx)
+        return element_keywords.get_text(locator)

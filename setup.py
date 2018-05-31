@@ -10,7 +10,7 @@ this library.
 """[1:-1]
 
 setup(name             = 'robotframework-flexseleniumlibrary',
-      version          = '0.3.1',
+      version          = '0.3.2',
       description      = 'Adobe Flex testing library for Robot Framework',
       long_description = DESCRIPTION,
       author           = 'Toni Lappalainen',
@@ -20,7 +20,7 @@ setup(name             = 'robotframework-flexseleniumlibrary',
       keywords         = 'robotframework testing testautomation selenium '
                          'webdriver flex FlexPilot SeleniumFlexAPI',
       platforms        = 'any',
-      install_requires = ['robotframework-selenium2library >= 1.7.0'],
+      install_requires = ['robotframework-seleniumlibrary >= 3.1.0'],
       package_dir      = {'' : 'src'},
       packages         = ['FlexSeleniumLibrary',
                           'FlexSeleniumLibrary.keywords'],
