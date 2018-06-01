@@ -1,7 +1,8 @@
 from ..flexpilotcommands import FlexPilotCommands
+from SeleniumLibrary.base import keyword, LibraryComponent
 
 
-class FlexPilotKeywords(object):
+class FlexPilotKeywords(LibraryComponent):
     """
     The keywords that manipulate the Flex application using FlexPilot tool.
     
@@ -12,15 +13,17 @@ class FlexPilotKeywords(object):
     https://github.com/mde/flex-pilot/wiki/API
     """
 
-    def __init__(self, web_driver=None, flash_object_id=None):
+    def __init__(self, ctx, flash_object_id=None):
         """Flex keywords
 
         Args:
-            web_driver: WebDriver instance to use sending the calls to Flex application
+            ctx: The Selenium context we are using
             flash_object_id: the name of the tested Flex application
         """
-        self.flex_pilot_commands = FlexPilotCommands(web_driver, flash_object_id)
+        LibraryComponent.__init__(self, ctx)
+        self.flex_pilot_commands = FlexPilotCommands(ctx, flash_object_id)
 
+    @keyword
     def fp_locator(self, locator_type, locator_string):
         """
         Generates a locator string from the parameters
@@ -52,6 +55,7 @@ class FlexPilotKeywords(object):
             return locator_string
         raise AssertionError("Unknown locator type: {}".format(locator_type))
 
+    @keyword
     def fp_id_locator(self, locator_string):
         """
         Generates a id locator string from the parameter
@@ -63,6 +67,7 @@ class FlexPilotKeywords(object):
         """
         return self.fp_locator("id", locator_string)
 
+    @keyword
     def fp_name_locator(self, locator_string):
         """
         Generates a name locator string from the parameter
@@ -74,6 +79,7 @@ class FlexPilotKeywords(object):
         """
         return self.fp_locator("name", locator_string)
 
+    @keyword
     def fp_child_locator(self, parent_locator, number_of_child):
         """
         Generates a child locator string from the parameter
@@ -86,6 +92,7 @@ class FlexPilotKeywords(object):
         """
         return "{}/{}".format(parent_locator, self.fp_locator("child", number_of_child))
 
+    @keyword
     def fp_chain_locator(self, *flex_pilot_locator):
         """
         Generates a chain locator string from the parameters
@@ -96,7 +103,8 @@ class FlexPilotKeywords(object):
             Locators chained to one
         """
         return "/".join(flex_pilot_locator)
-        
+
+    @keyword
     def fp_assert_display_object(self, locator):
         """
         Assert a display object exists
@@ -105,7 +113,8 @@ class FlexPilotKeywords(object):
             locator: See FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_assertDisplayObject", locator)
-    
+
+    @keyword
     def fp_assert_property(self, locator, validator):
         """
         Assert a display object 'locator', contains a specified property 'validator' (property pipe value)
@@ -117,7 +126,8 @@ class FlexPilotKeywords(object):
             validator:
         """
         return self.flex_pilot_commands.call("fp_assertProperty", locator, "validator:'{}'".format(validator))
-    
+
+    @keyword
     def fp_assert_text(self, locator, validator):
         """
         Assert a specified input field 'locator' equals text 'validator'
@@ -127,7 +137,8 @@ class FlexPilotKeywords(object):
             validator:
         """
         return self.flex_pilot_commands.call("fp_assertText", locator, "validator:'{}'".format(validator))
-    
+
+    @keyword
     def fp_assert_text_in(self, locator, validator):
         """
         Assert a specified input field 'locator' contains text 'validator'
@@ -137,7 +148,8 @@ class FlexPilotKeywords(object):
             validator:
         """
         return self.flex_pilot_commands.call("fp_assertTextIn", locator, "validator:'{}'".format(validator))
-    
+
+    @keyword
     def fp_check(self, locator):
         """
         Checks the display object (Equivalent to fp_click).
@@ -146,7 +158,8 @@ class FlexPilotKeywords(object):
             locator: See FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_check", locator)
-    
+
+    @keyword
     def fp_click(self, locator, label=None):
         """
         Clicks display object.
@@ -158,7 +171,8 @@ class FlexPilotKeywords(object):
         if label is not None:
             return self.flex_pilot_commands.call("fp_click", locator, "'label':'{}'".format(label))
         return self.flex_pilot_commands.call("fp_click", locator)
-    
+
+    @keyword
     def fp_date(self, locator):
         """
         Triggers the calendar layout date change on the display object.
@@ -167,7 +181,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_date", locator)
-    
+
+    @keyword
     def fp_drag_drop_to_coordinates(self, locator, x, y):
         """
         Drags a display object 'locator' to a specified x,y.
@@ -178,7 +193,8 @@ class FlexPilotKeywords(object):
             y: y-coordinate of the destination
         """
         return self.flex_pilot_commands.call("fp_dragDropToCoords", locator, "'coords':'{},{}'".format(x, y))
-    
+
+    @keyword
     def fp_drag_drop_elem_to_elem(self, source_locator, destination_locator):
         """
         Drags a display object to the coordinates of the display object 'destination_locator'.
@@ -188,7 +204,8 @@ class FlexPilotKeywords(object):
             destination_locator: see FlexPilotKeywords.flex_pilot_locator, the destination of the drag
         """
         return self.flex_pilot_commands.call("fp_dragDropElemToElem", source_locator, destination_locator)
-    
+
+    @keyword
     def fp_double_click(self, locator):
         """
         Double clicks display object.
@@ -197,7 +214,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_doubleClick", locator)
-    
+
+    @keyword
     def fp_dump(self, locator):
         """
         Dumps the child structure of display object for test building purposes.
@@ -206,7 +224,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_dump", locator)
-    
+
+    @keyword
     def fp_get_object_coordinates(self, locator):
         """
         Gets the coordinates of the display object.
@@ -215,7 +234,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_getObjectCoords", locator)
-    
+
+    @keyword
     def fp_get_property_value(self, locator, attribute_name):
         """
         Gets the value of the property 'attrName' on the display object.
@@ -225,7 +245,8 @@ class FlexPilotKeywords(object):
             attribute_name: name of the property to get
         """
         return self.flex_pilot_commands.call("fp_getPropertyValue", locator, "'attrName':'{}'".format(attribute_name))
-    
+
+    @keyword
     def fp_get_text_value(self, locator):
         """
         Gets the text value of the display object (either the htmlText or label).
@@ -234,7 +255,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_getTextValue", locator)
-    
+
+    @keyword
     def fp_get_version(self):
         """
         Returns the version of FlexPilot currently running.
@@ -243,7 +265,8 @@ class FlexPilotKeywords(object):
             Version of the FlexPilot
         """
         return self.flex_pilot_commands.call("fp_getVersion")
-    
+
+    @keyword
     def fp_lookup_flash(self, locator):
         """
         Looks up a display object in the display list.
@@ -252,7 +275,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_lookupFlash", locator)
-    
+
+    @keyword
     def fp_mouse_out(self, locator):
         """
         Mouses out of display object.
@@ -261,7 +285,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_mouseOut", locator)
-    
+
+    @keyword
     def fp_mouse_over(self, locator):
         """
         Mouses over display object.
@@ -270,7 +295,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_mouseOver", locator)
-    
+
+    @keyword
     def fp_radio(self, locator):
         """
         Selects the radio button display object (Equivalent to fp_click).
@@ -279,7 +305,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_radio", locator)
-    
+
+    @keyword
     def fp_select(self, locator):
         """
         Selects specified combo box display object.
@@ -290,7 +317,8 @@ class FlexPilotKeywords(object):
             locator: see FlexPilotKeywords.flex_pilot_locator
         """
         return self.flex_pilot_commands.call("fp_select", locator)
-    
+
+    @keyword
     def fp_type(self, locator, text):
         """
         Types 'text' into the display object found by the locator lookup.
@@ -301,6 +329,7 @@ class FlexPilotKeywords(object):
         """
         return self.flex_pilot_commands.call("fp_type", locator, "'text':'{}'".format(text))
 
+    @keyword
     def fp_wait_for_flex_ready(self, timeout):
         """
         Wait for the application to load
@@ -310,6 +339,7 @@ class FlexPilotKeywords(object):
         """
         self.flex_pilot_commands.wait_for_flex_application_to_load(int(timeout))
 
+    @keyword
     def fp_wait_for_flex_object(self, locator, timeout):
         """
         Wait for the flex object to appear

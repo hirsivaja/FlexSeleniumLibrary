@@ -4,13 +4,11 @@ from robot.api import logger
 
 class FlexPilotCommands(object):
 
-    def __init__(self, web_driver, flash_object_id):
-        self.web_driver = web_driver
+    def __init__(self, ctx, flash_object_id):
         self.flash_object_id = flash_object_id
+        self.ctx = ctx
 
     def call(self, function_name, *function_parameters):
-        if self.web_driver is None:
-            raise AssertionError("WebDriver is not initialized!")
         params = ""
         if len(function_parameters) > 0:
             for param in function_parameters:
@@ -18,11 +16,8 @@ class FlexPilotCommands(object):
             params = "{" + params[:-1] + "}"
         script = "return document.getElementById('{}').{}({});".format(self.flash_object_id, function_name, params)
         logger.debug("JavaScript to execute: '{}'".format(script))
-        result = self.web_driver.execute_script(script)
+        result = self.ctx.driver.execute_script(script)
         return result
-
-    def set_web_driver(self, web_driver):
-        self.web_driver = web_driver
 
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
@@ -31,7 +26,7 @@ class FlexPilotCommands(object):
         script = "return document.getElementById('{}').fp_click;".format(self.flash_object_id)
         tries = timeout * 10
         while True:
-            result = self.web_driver.execute_script(script)
+            result = self.ctx.driver.execute_script(script)
             if result is not None:
                 break
             tries -= 1

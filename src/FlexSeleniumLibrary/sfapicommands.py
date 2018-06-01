@@ -4,18 +4,15 @@ from robot.api import logger
 
 
 class SeleniumFlexAPICommands(object):
-    def __init__(self, web_driver, flash_object_id, api_version=28, sleep_after_call=0, sleep_after_fail=0.1,
+    def __init__(self, ctx, flash_object_id, api_version=28, sleep_after_call=0, sleep_after_fail=0.1,
                  number_of_retries=30, ensure_timeout=30):
-        self.web_driver = web_driver
+        self.ctx = ctx
         self.flash_object_id = flash_object_id
         self.api_version = api_version
         self.sleep_after_call = sleep_after_call
         self.sleep_after_fail = sleep_after_fail
         self.number_of_retries = number_of_retries
         self.ensure_timeout = ensure_timeout
-
-    def set_web_driver(self, web_driver):
-        self.web_driver = web_driver
 
     def set_flash_app(self, flash_app):
         self.flash_object_id = flash_app
@@ -36,8 +33,6 @@ class SeleniumFlexAPICommands(object):
         self.ensure_timeout = ensure_timeout
 
     def call(self, function_name, *function_parameters):
-        if self.web_driver is None:
-            raise AssertionError("WebDriver is not initialized!")
         params = ""
         for param in function_parameters:
             params += "'" + str(param) + "',"
@@ -46,7 +41,7 @@ class SeleniumFlexAPICommands(object):
         logger.debug("JavaScript to execute: '{}'".format(script))
         while True:
             try:
-                result = self.web_driver.execute_script(script)
+                result = self.ctx.driver.execute_script(script)
                 break
             except WebDriverException as e:
                 if tries < 1:
@@ -71,7 +66,7 @@ class SeleniumFlexAPICommands(object):
 
     def is_function_defined(self, function_name):
         script = "return document.{}.{};".format(self.flash_object_id, function_name)
-        result = self.web_driver.execute_script(script)
+        result = self.ctx.driver.execute_script(script)
         if result is None:
             return False
         if "{}()".format(function_name) in result:

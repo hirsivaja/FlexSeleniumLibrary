@@ -7,18 +7,14 @@ from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.keywords import *
 
 
-class FlexSeleniumLibrary(
-            FlexSeleniumKeywords,
-            FlexPilotKeywords,
-            SeleniumLibrary
-        ):
+class FlexSeleniumLibrary(SeleniumLibrary):
     """
     Test library for Adobe/Apache Flex. Imports SeleniumLibrary keywords to manipulate rest of the web pages.
 
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-    ROBOT_LIBRARY_VERSION = '0.3.2'
+    ROBOT_LIBRARY_VERSION = '0.3.3'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self,
@@ -41,10 +37,10 @@ class FlexSeleniumLibrary(
         """
         SeleniumLibrary.__init__(self, selenium_timeout, selenium_implicit_wait, selenium_run_on_failure,
                                  selenium_screenshot_root_directory)
-        FlexSeleniumKeywords.__init__(self, None, flash_app, int(api_version), float(sleep_after_call),
-                                      float(sleep_after_fail), int(number_of_retries), float(ensure_timeout))
-        FlexPilotKeywords.__init__(self, None, flash_app)
-        self.add_library_components([OverwrittenKeywords(self, self.sf_api_commands, self.flex_pilot_commands)])
+        self.add_library_components([FlexSeleniumKeywords(self, flash_app, int(api_version), float(sleep_after_call),
+                                                          float(sleep_after_fail), int(number_of_retries), float(ensure_timeout)),
+                                     FlexPilotKeywords(self, flash_app),
+                                     OverwrittenKeywords(self)])
 
     def set_flash_app(self, flash_app):
         """Change the flash application name under test. The application name is used to create the JavaScript
@@ -107,10 +103,8 @@ class OverwrittenKeywords(LibraryComponent):
     Some of the SeleniumLibrary keywords need to be overwritten so that they work with Flex
     """
 
-    def __init__(self, ctx, sf_api_commands, flex_pilot_commands):
+    def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self.sf_api_commands = sf_api_commands
-        self.flex_pilot_commands = flex_pilot_commands
 
     @keyword
     def open_browser(self, url='', browser='firefox', alias=None, remote_url=False, desired_capabilities=None,
@@ -135,8 +129,6 @@ class OverwrittenKeywords(LibraryComponent):
         """
         browser_management = BrowserManagementKeywords(self.ctx)
         browser_management.open_browser(url, browser, alias, remote_url, desired_capabilities, ff_profile_dir)
-        self.sf_api_commands.set_web_driver(self.driver)
-        self.flex_pilot_commands.set_web_driver(self.driver)
 
     @keyword
     def close_browser(self):
@@ -144,8 +136,6 @@ class OverwrittenKeywords(LibraryComponent):
         """
         browser_management = BrowserManagementKeywords(self.ctx)
         browser_management.close_browser()
-        self.sf_api_commands.set_web_driver(None)
-        self.flex_pilot_commands.set_web_driver(None)
 
     @keyword
     def close_all_browsers(self):
@@ -153,8 +143,6 @@ class OverwrittenKeywords(LibraryComponent):
         """
         browser_management = BrowserManagementKeywords(self.ctx)
         browser_management.close_all_browsers()
-        self.sf_api_commands.set_web_driver(None)
-        self.flex_pilot_commands.set_web_driver(None)
 
     @keyword
     def get_text_selenium(self, locator):
