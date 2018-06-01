@@ -717,7 +717,7 @@ Wait For Element To Exist
 
 *** Keywords ***
 Suite Start
-    Open Browser    ${EMPTY}    ${browser}
+    Open Browser    about:blank    ${browser}
     Maximize Browser Window
 
 Suite Stop
