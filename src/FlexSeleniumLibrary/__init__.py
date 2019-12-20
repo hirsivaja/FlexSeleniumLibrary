@@ -14,7 +14,7 @@ class FlexSeleniumLibrary(SeleniumLibrary):
     Uses the SeleniumFlexAPI to send the commands to the Flex application. The SFAPI library needs to be taken in use
     in the Flex application for the commands to work.
     """
-    ROBOT_LIBRARY_VERSION = '0.3.3'
+    ROBOT_LIBRARY_VERSION = '0.3.4'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self,
