@@ -10,7 +10,7 @@ this library.
 """[1:-1]
 
 setup(name             = 'robotframework-flexseleniumlibrary',
-      version          = '0.3.3',
+      version          = '0.3.4',
       description      = 'Adobe Flex testing library for Robot Framework',
       long_description = DESCRIPTION,
       author           = 'Toni Lappalainen',
